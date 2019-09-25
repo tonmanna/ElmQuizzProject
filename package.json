@@ -10,8 +10,6 @@
   },
   "scripts": {
     "dev": "elm reactor",
-    "build": "elm make src\\main.elm src\\quizz.elm --output app.js --optimize",
-    "debug": "elm make src\\main.elm src\\quizz.elm --output app.js --debug",
     "start": "parcel index.html"
   },
   "author": "",
