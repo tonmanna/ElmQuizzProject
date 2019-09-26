@@ -2,5 +2,9 @@
     "files.exclude": {
         "**/.git": true,
         "**/node_modules": true,
-        "**/elm-stuff": true
-    }}
+        "**/elm-stuff": true,
+        ".cache": true,
+        "package-lock.json": true,
+        "dist": true
+    }
+}

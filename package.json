@@ -10,7 +10,8 @@
   },
   "scripts": {
     "dev": "elm reactor",
-    "start": "parcel index.html"
+    "start": "parcel index.html",
+    "install": "elm install"
   },
   "author": "",
   "license": "ISC",
