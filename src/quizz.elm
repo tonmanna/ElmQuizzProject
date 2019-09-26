@@ -1,31 +1,27 @@
-module Hello2 exposing (main)
+module SimpleQuizz exposing (main)
 
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 
-initQuizzModel : { question : String, answer : String , checked : Bool}
 initQuizzModel = 
   {  question = "XXXXXX"
     , answer = "YYYYYY"
     , checked = False
   }
 
--- START:msg
-type Msg
+type MessageEnum
     = TRUE
     | FALSE
--- END:msg
 
-viewQuizz : { question : String, answer: String, checked : Bool } -> Html Msg
+
 viewQuizz model =
   div [] [ Html.text model.answer ] 
 
-view : { question : String , answer: String, checked : Bool } -> Html Msg
 view model =
     let 
-      msg = if model.checked then FALSE else TRUE
+      message = if model.checked then FALSE else TRUE
       textMessage =
             if model.checked then
                 "BBBBBB"
@@ -34,13 +30,11 @@ view model =
     in
     div []
         [ div []
-            [ h1 [ onClick msg, Html.Attributes.style "cursor" "pointer" ] [ Html.text textMessage ] ]
+            [ h1 [ onClick message, Html.Attributes.style "cursor" "pointer" ] [ Html.text textMessage ] ]
         , div []
             [ viewQuizz model ]
         ]
 
-update : 
-    Msg -> { question : String , answer: String, checked : Bool } -> { question : String , answer: String, checked : Bool }
 update msg model =
     case msg of
         TRUE ->
@@ -48,8 +42,6 @@ update msg model =
         FALSE ->
           { model | checked = False}
 
-
-main : Program () { question : String , answer: String, checked : Bool } Msg
 main =
     Browser.sandbox
         { init = initQuizzModel
