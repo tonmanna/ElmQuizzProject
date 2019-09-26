@@ -11,9 +11,7 @@ initQuizzModel =
     , checked = False
   }
 
-type MessageEnum
-    = TRUE
-    | FALSE
+type MessageEnum = TRUE | FALSE
 
 
 viewQuizz model =
