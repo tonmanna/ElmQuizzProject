@@ -11,7 +11,7 @@ import List exposing (..)
 
 type alias QuestionListModel = { questions : List Question, currentQuestion: Int, hiddenQuestion: Bool, version: String}
 type alias Question = {  no: Int, title: String, answer: String, mermaid: String, code: String }
-type Message = LetPlay | ClickNext | ClickBack | FromJS String | SendToJS
+type Message = LetPlay | ClickNext | ClickBack | GetFromJS String | SetToJS
 
 initialModel : QuestionListModel
 initialModel ={ 
@@ -31,9 +31,9 @@ initQuestion: Question
 initQuestion = { no = 0, title = "FINISH", answer = "", mermaid = "", code="" }
 
 subscriptions : QuestionListModel -> Sub Message
-subscriptions model = subFromJS FromJS
-port subFromJS : (String -> msg) -> Sub msg
-port sendToJS : String -> Cmd msg
+subscriptions model = fromJS GetFromJS
+port fromJS : (String -> msg) -> Sub msg
+port toJS : QuestionListModel -> Cmd msg
 
 viewQuestion : Question -> Html Message
 viewQuestion question =
@@ -85,7 +85,7 @@ view model =
             , p []
                 [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
             , p []
-                [ span [ class "btn btn-primary btn-lg", onClick SendToJS ]
+                [ span [ class "btn btn-primary btn-lg", onClick SetToJS ]
                     [ text "Submit exam answer" ]
                 ]    
             ]
@@ -103,12 +103,10 @@ update msg model =
             ({ model | hiddenQuestion = True }, Cmd.none)
         LetPlay ->
           ({ model | hiddenQuestion = False }, Cmd.none)
-        SendToJS ->
-          (model , sendToJS "Empty")
-        FromJS value ->
+        GetFromJS value ->
           ({ model | version = value }, Cmd.none)
-
-
+        SetToJS ->
+          (model , toJS model)
 
 main =
     Browser.element
