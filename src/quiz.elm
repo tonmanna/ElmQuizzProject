@@ -6,8 +6,8 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 
 initQuizzModel = 
-  {  question = "XXXXXX"
-    , answer = "YYYYYY"
+  {  question = "XXXXXX222"
+    , answer = "YYYYYY111"
     , checked = False
   }
 

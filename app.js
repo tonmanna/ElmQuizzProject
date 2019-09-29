@@ -1,5 +1,5 @@
-import { Elm } from "./src/quizz.elm";
+import { Elm } from "./src/components/quiz.elm";
 
-Elm.QuizzLogin.init({
+Elm.SimpleQuizz.init({
   node: document.querySelector("main")
 });
