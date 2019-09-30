@@ -1,7 +1,7 @@
 port module SimpleQuizz exposing (..)
 
 import Browser
-import Html exposing (Html, div, text, label, input, textarea, span, h1, p, a)
+import Html exposing (Html, div, text, label, input, textarea, span, h1, p, a, code, pre)
 import Html.Attributes exposing (attribute, class, placeholder, type_, for, rows, style, href, hidden, id)
 import Html.Events exposing (onClick)
 
@@ -14,18 +14,57 @@ type alias Question = {  no: Int, title: String, answer: String, mermaid: String
 type Message = LetPlay | ClickNext | ClickBack | GetFromJS String | SetToJS
 
 initialModel : QuestionListModel
-initialModel ={ 
+initialModel = { 
     questions = 
-    [ { no = 1, title = "The example uses a WHERE clause to show the only person team leader.", answer = "111", mermaid = "", code = "" }
-    , { no = 2, title = "The example uses a WHERE clause to show the only person team leader.", answer = "222 ", mermaid = "", code = "" }
+    [ { no = 1, title = "The example uses a WHERE clause to show the only person team leader.", answer = "111"
+        , mermaid = 
+            """graph TB
+    c1-->a2
+    subgraph one
+    a1-->a2
+    end
+    subgraph two
+    b1-->b2
+    end
+    subgraph three
+    c1-->c2
+    end """
+        , code = """var x = 5;
+    const foo = {
+        x: 100,
+        getX(){
+            reeturn this.x;
+            }
+    }
+    const bar = {
+        x:20
+    }
+    bar.getX = foo.getX;
+    console.log(bar.getX());""" }
+    , { no = 2, title = "The example uses a WHERE clause to show the only person team leader.", answer = "222 "
+        , mermaid = 
+            """graph TD
+    B["fa:fa-twitter for peace "]
+    B-->C[fa:fa-ban forbidden]
+    B-->D(fa:fa-spinner);
+    B-->E(A fa:fa-camera-retro perhaps? );"""
+        , code = """const basket = {
+        apple: 2,
+        banana: 4,
+        orange: 6,
+        strawberry: 8
+    }
+    for (const fruit in basket) {
+        console.log(fruit);
+    }""" }
     ]
-    , currentQuestion = 1
+    , currentQuestion = 0
     , hiddenQuestion = True
     , version = "0.0"
   }
 
 init: String -> (QuestionListModel, Cmd Message)
-init flags = (initialModel, Cmd.none)
+init flags = ({initialModel | version = flags }, toJS initialModel)
 
 initQuestion: Question
 initQuestion = { no = 0, title = "FINISH", answer = "", mermaid = "", code="" }
@@ -45,7 +84,8 @@ viewQuestion question =
                 [text question.answer]
             , div [ class "invalid-feedback" ]
                 [ text "Please enter your valid SQL." ]
-            , div [ class "mermaid", id "mermaidChart0" ] [text ""]
+            , div [ id ("mermaid" ++ String.fromInt question.no) ] []
+            , pre [ ] [ code [ id ("code" ++ String.fromInt question.no), class "javascript" ] [ text question.code ] ]
             ]
         ]
 
@@ -63,6 +103,8 @@ view model =
       currentQuestion = case (List.head currentQuestions) of
         Nothing -> initQuestion
         Just val -> val
+      notShowQuestion = (model.hiddenQuestion || (currentQuestion.title == "FINISH"))
+      showFinishBadge = (currentQuestion.title == "FINISH" && not (model.currentQuestion == 0) )
     in
     div []
         [ div [ class "container", hidden (not model.hiddenQuestion) ]
@@ -77,17 +119,19 @@ view model =
                     [ text "Let's Play »" ]
                 ]
             ]
-          , div [ class "container", hidden (model.hiddenQuestion || (currentQuestion.title == "FINISH")) ] [viewQuestion currentQuestion]
-          , div [ class "container", hidden (model.hiddenQuestion || (currentQuestion.title == "FINISH")) ] [viewNextBackQuestion model]
-          , div [ class "container", hidden (not (currentQuestion.title == "FINISH")) ]
+          , div [ class "container", hidden notShowQuestion] [viewQuestion currentQuestion]
+          , div [ class "container", hidden notShowQuestion] [viewNextBackQuestion model]
+          , div [ class "container", hidden (not showFinishBadge) ]
             [ h1 [ class "display-12" ]
                 [ text currentQuestion.title ]
             , p []
                 [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
             , p []
-                [ span [ class "btn btn-primary btn-lg", onClick SetToJS ]
+                [   span [ class "btn btn-primary btn-lg" ]
                     [ text "Submit exam answer" ]
-                ]    
+                    ,   span [ class "btn btn-warning btn-lg", style "margin-left" "5px", onClick LetPlay ]
+                    [ text " Back " ]
+                ]
             ]
         ]
 
@@ -95,14 +139,14 @@ update : Message -> QuestionListModel ->(QuestionListModel, Cmd Message)
 update msg model =
     case msg of
         ClickNext ->          
-          ({ model | currentQuestion = model.currentQuestion + 1 }, Cmd.none)
+          ({ model | currentQuestion = model.currentQuestion + 1 }, toJS { model | currentQuestion = model.currentQuestion + 1 })
         ClickBack ->
           if model.currentQuestion > 1 then
-            ({ model | currentQuestion = model.currentQuestion - 1 }, Cmd.none)
+            ({ model | currentQuestion = model.currentQuestion - 1 }, toJS { model | currentQuestion = model.currentQuestion - 1 })
           else
             ({ model | hiddenQuestion = True }, Cmd.none)
         LetPlay ->
-          ({ model | hiddenQuestion = False }, Cmd.none)
+          ({ model | currentQuestion = 1, hiddenQuestion = False }, toJS { model | currentQuestion = 1 })
         GetFromJS value ->
           ({ model | version = value }, Cmd.none)
         SetToJS ->

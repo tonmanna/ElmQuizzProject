@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "elm reactor",
     "start": "parcel index.html",
-    "install": "elm install"
+    "make": "elm make ./src/"
   },
   "author": "",
   "license": "ISC",
