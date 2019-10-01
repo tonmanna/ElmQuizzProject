@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "markdown-it": "^10.0.0",
-    "parcel-bundler": "^1.12.3"
+    "parcel-bundler": "^1.12.3",
+    "prismjs": "^1.17.1"
   }
 }
