@@ -36,3 +36,7 @@ app.ports.toJS.subscribe(function(model) {
     }, 100);
   }
 });
+
+app.ports.submitAnswer.subscribe(function(string) {
+  console.log(string);
+});

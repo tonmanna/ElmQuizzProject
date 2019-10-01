@@ -125,6 +125,7 @@ subscriptions : QuestionListModel -> Sub Message
 subscriptions model = fromJS GetFromJS
 port fromJS : (String -> msg) -> Sub msg
 port toJS : QuestionListModel -> Cmd msg
+port submitAnswer : String -> Cmd msg
 
 viewQuestion : Question -> Html Message
 viewQuestion question =
@@ -204,7 +205,7 @@ update msg model =
         SetToJS ->
           (model , toJS model)
         ChangeAnswer content ->
-          ( model , Cmd.none)
+          ( model , submitAnswer content)
 
 main =
     Browser.element
