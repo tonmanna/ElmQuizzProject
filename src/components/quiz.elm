@@ -205,7 +205,14 @@ update msg model =
         SetToJS ->
           (model , toJS model)
         ChangeAnswer content ->
-          ( model , submitAnswer content)
+          ( model , Cmd.none)
+
+-- TODO: updateModel After Change Answer
+-- ีupdateModel questions:QuestionListModel index:Int -> Question =
+--     case (List.head (List.filter (\x -> x.no == index) questions)) of
+--         Just val -> val
+--         Nothing -> initQuestion
+  
 
 main =
     Browser.element
