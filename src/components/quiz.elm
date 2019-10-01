@@ -125,7 +125,7 @@ subscriptions : QuestionListModel -> Sub Message
 subscriptions model = fromJS GetFromJS
 port fromJS : (String -> msg) -> Sub msg
 port toJS : QuestionListModel -> Cmd msg
-port submitAnswer : String -> Cmd msg
+port submitAnswer : Question -> Cmd msg
 
 viewQuestion : Question -> Html Message
 viewQuestion question =
@@ -204,14 +204,14 @@ update msg model =
           ({ model | version = value }, Cmd.none)
         SetToJS ->
           (model , toJS model)
-        ChangeAnswer content ->
-          ( model , Cmd.none)
+        ChangeAnswer content -> 
+          ( model , submitAnswer (updateModel model content) )
 
 -- TODO: updateModel After Change Answer
--- ีupdateModel questions:QuestionListModel index:Int -> Question =
---     case (List.head (List.filter (\x -> x.no == index) questions)) of
---         Just val -> val
---         Nothing -> initQuestion
+updateModel model content = 
+    case (List.head (List.filter (\x -> x.no == model.currentQuestion) model.questions)) of
+        Just val -> ( {val | answer = content })
+        Nothing -> initQuestion
   
 
 main =
