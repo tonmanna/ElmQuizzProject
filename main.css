@@ -3,3 +3,7 @@
 body {
     font-size: 1.4rem;
 }
+.text-bold-load {
+    font-weight: bold;
+    color: #0c0c0c
+}

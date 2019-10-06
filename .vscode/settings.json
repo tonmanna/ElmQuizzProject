@@ -1,4 +1,7 @@
 {
+    "editor.formatOnSave": true,
+    "eslint.autoFixOnSave": true,
+    "eslint.enable": true,
     "files.exclude": {
         "**/.git": true,
         "**/node_modules": true,
@@ -6,5 +9,8 @@
         ".cache": true,
         "package-lock.json": true,
         "dist": true
-    }
+    },
+    "[elm]": {
+        "editor.formatOnSave": true
+    },
 }
