@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "elm reactor",
     "start": "parcel index.html",
-    "build": "cp -R ./src/assets ./dist/assets && parcel build index.html",
+    "build": "parcel build index.html && cp -R ./src/assets ./dist/assets",
     "make": "elm make ./src/"
   },
   "author": "",
