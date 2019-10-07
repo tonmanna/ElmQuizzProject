@@ -250,6 +250,11 @@ view model =
                 [ span [ class "btn btn-primary btn-lg", onClick LetPlay ]
                     [ text "Let's Play »" ]
                 ]
+            , p [ class "text-bold-load" ] [ text "Download Programmer" ]
+            , p []
+                [ text "Exam JS TDD:"
+                , a [ href "https://github.com/iTopPlus/ExamJSTDD" ] [ text "Exam JS TDD" ]
+                ]
             , p [ class "text-bold-load" ] [ text "Download" ]
             , p []
                 [ text "ClosePackage Lab:"
