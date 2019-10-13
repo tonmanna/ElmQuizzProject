@@ -1,27 +1,32 @@
 port module SimpleQuizz exposing (..)
 
 import Browser
-import Html exposing (Html, a, code, div, h1, input, label, p, pre, span, text, textarea)
-import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeholder, rows, style, type_)
-import Html.Events exposing (onClick, onInput)
+import Html exposing (Html, a, code, div, form, h1, input, label, p, pre, span, text, textarea)
+import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeholder, rows, style, type_, value)
+import Html.Events exposing (onClick, onInput, onSubmit)
 import List exposing (..)
 
 
 type alias QuestionListModel =
-    { questions : List Question, currentQuestion : Int, hiddenQuestion : Bool, version : String }
+    { questions : List Question, currentQuestionNumber : Int, hiddenQuestion : Bool, version : String }
 
 
 type alias Question =
     { no : Int, title : String, answer : String, mermaid : String, code : String, markdown : String }
 
 
-type Message
+type Msg
     = LetPlay
-    | ClickNext
-    | ClickBack
+    | ClickNext Question
+    | ClickBack Question
     | GetFromJS String
+    | InputAnswer String
     | SetToJS
-    | ChangeAnswer String
+
+
+initQuestion : Question
+initQuestion =
+    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "" }
 
 
 initialModel : QuestionListModel
@@ -165,38 +170,85 @@ initialModel =
           , markdown = """ """
           }
         ]
-    , currentQuestion = 0
+    , currentQuestionNumber = 0
     , hiddenQuestion = True
     , version = "0.0"
     }
 
 
-init : String -> ( QuestionListModel, Cmd Message )
+init : String -> ( QuestionListModel, Cmd Msg )
 init flags =
     ( { initialModel | version = flags }, code_heighlight initialModel )
 
 
-initQuestion : Question
-initQuestion =
-    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "" }
-
-
-subscriptions : QuestionListModel -> Sub Message
+subscriptions : QuestionListModel -> Sub Msg
 subscriptions model =
     from_js GetFromJS
 
 
-port from_js : (String -> msg) -> Sub msg
+port from_js : (String -> message) -> Sub message
 
 
-port code_heighlight : QuestionListModel -> Cmd msg
+port code_heighlight : QuestionListModel -> Cmd message
 
 
-port submit_answer : Question -> Cmd msg
+port save_answer : QuestionListModel -> Cmd message
 
 
-viewQuestion : Question -> Html Message
-viewQuestion question =
+viewStartBadge : QuestionListModel -> Html Msg
+viewStartBadge model =
+    div []
+        [ h1 [ class "display-12" ]
+            [ text "The exam center for candidate." ]
+        , p []
+            [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
+        , p []
+            [ label [ class "badge badge-secondary" ] [ text ("Version:" ++ model.version) ] ]
+        , p []
+            [ span [ class "btn btn-primary btn-lg", onClick LetPlay ]
+                [ text "Let's Play »" ]
+            ]
+        ]
+
+
+viewFinishBadge : Question -> Bool -> Html Msg
+viewFinishBadge question showFinishBadge =
+    div [ class "container", hidden (not showFinishBadge) ]
+        [ h1 [ class "display-12" ]
+            [ text question.title ]
+        , p []
+            [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
+        , p []
+            [ input [ class "btn btn-primary btn-lg", type_ "button" ]
+                [ text "Submit exam answer" ]
+            , input [ class "btn btn-warning btn-lg", type_ "button", style "margin-left" "5px", onClick LetPlay ]
+                [ text " Back " ]
+            ]
+        ]
+
+
+viewDownloadLink : Html Msg
+viewDownloadLink =
+    div []
+        [ p [ class "text-bold-load" ] [ text "Download Programmer" ]
+        , p []
+            [ text "Exam JS TDD:"
+            , a [ href "https://github.com/iTopPlus/ExamJSTDD" ] [ text "Exam JS TDD" ]
+            ]
+        , p [ class "text-bold-load" ] [ text "Download" ]
+        , p []
+            [ text "ClosePackage Lab:"
+            , a [ href "/assets/exam/ClosePackage_Q2.xlsx" ] [ text "Excel Test Exam I(Close Job)" ]
+            ]
+        , p []
+            [ text "Test Website Lab:"
+            , a [ href "/assets/exam/Test_Website.xlsx" ] [ text "Excel Test Exam II (Test_Website Job)" ]
+            ]
+        ]
+
+
+viewQuestion : Question -> Bool -> Html Msg
+viewQuestion question notShowQuestion =
     div []
         [ div [ class "mb-3" ]
             [ label [ for "address" ]
@@ -204,25 +256,26 @@ viewQuestion question =
             , div [ id ("mermaid" ++ String.fromInt question.no) ] []
             , div [ id ("markdown" ++ String.fromInt question.no) ] []
             , pre [] [ code [ id ("code" ++ String.fromInt question.no), class "language-javascript" ] [] ]
-            , textarea [ class "form-control", placeholder "Please enter answer here", rows 5, onInput ChangeAnswer ]
-                [ text question.answer ]
+            , textarea [ class "form-control", placeholder "Please enter answer here", rows 5, onInput InputAnswer ]
+                [ text "" ]
             ]
+        , div [ class "container", hidden notShowQuestion ] [ viewNextBack question ]
         ]
 
 
-viewNextBackQuestion : QuestionListModel -> Html Message
-viewNextBackQuestion model =
+viewNextBack : Question -> Html Msg
+viewNextBack question =
     div [ class "row" ]
-        [ span [ class "btn btn-warning", onClick ClickBack, style "margin-left" "5px" ] [ text "Back" ]
-        , span [ class "btn btn-info", onClick ClickNext, style "margin-left" "5px" ] [ text "Next" ]
+        [ input [ class "btn btn-warning", onClick (ClickBack question), style "margin-left" "5px", type_ "submit", value "Back" ] []
+        , input [ class "btn btn-info", onClick (ClickNext question), style "margin-left" "5px", type_ "submit", value "Next" ] []
         ]
 
 
-view : QuestionListModel -> Html Message
+view : QuestionListModel -> Html Msg
 view model =
     let
         currentQuestions =
-            List.filter (\x -> x.no == model.currentQuestion) model.questions
+            List.filter (\x -> x.no == model.currentQuestionNumber) model.questions
 
         currentQuestion =
             case List.head currentQuestions of
@@ -236,67 +289,58 @@ view model =
             model.hiddenQuestion || (currentQuestion.title == "FINISH")
 
         showFinishBadge =
-            currentQuestion.title == "FINISH" && not (model.currentQuestion == 0)
+            currentQuestion.title == "FINISH" && not (model.currentQuestionNumber == 0)
     in
     div []
         [ div [ class "container", hidden (not model.hiddenQuestion) ]
-            [ h1 [ class "display-12" ]
-                [ text "The exam center for candidate." ]
-            , p []
-                [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
-            , p []
-                [ label [ class "badge badge-secondary" ] [ text ("Version:" ++ model.version) ] ]
-            , p []
-                [ span [ class "btn btn-primary btn-lg", onClick LetPlay ]
-                    [ text "Let's Play »" ]
-                ]
-            , p [ class "text-bold-load" ] [ text "Download Programmer" ]
-            , p []
-                [ text "Exam JS TDD:"
-                , a [ href "https://github.com/iTopPlus/ExamJSTDD" ] [ text "Exam JS TDD" ]
-                ]
-            , p [ class "text-bold-load" ] [ text "Download" ]
-            , p []
-                [ text "ClosePackage Lab:"
-                , a [ href "/assets/exam/ClosePackage_Q2.xlsx" ] [ text "Excel Test Exam I(Close Job)" ]
-                ]
-            , p []
-                [ text "Test Website Lab:"
-                , a [ href "/assets/exam/Test_Website.xlsx" ] [ text "Excel Test Exam II (Test_Website Job)" ]
-                ]
+            [ viewStartBadge model
+            , viewDownloadLink
             ]
-        , div [ class "container", hidden notShowQuestion ] [ viewQuestion currentQuestion ]
-        , div [ class "container", hidden notShowQuestion ] [ viewNextBackQuestion model ]
-        , div [ class "container", hidden (not showFinishBadge) ]
-            [ h1 [ class "display-12" ]
-                [ text currentQuestion.title ]
-            , p []
-                [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
-            , p []
-                [ span [ class "btn btn-primary btn-lg" ]
-                    [ text "Submit exam answer" ]
-                , span [ class "btn btn-warning btn-lg", style "margin-left" "5px", onClick LetPlay ]
-                    [ text " Back " ]
-                ]
-            ]
+        , div [ class "container", hidden notShowQuestion ] [ viewQuestion currentQuestion notShowQuestion ]
+        , viewFinishBadge currentQuestion showFinishBadge
         ]
 
 
-update : Message -> QuestionListModel -> ( QuestionListModel, Cmd Message )
-update msg model =
-    case msg of
-        ClickNext ->
-            ( { model | currentQuestion = model.currentQuestion + 1 }, code_heighlight { model | currentQuestion = model.currentQuestion + 1 } )
+update : Msg -> QuestionListModel -> ( QuestionListModel, Cmd Msg )
+update message model =
+    case message of
+        ClickNext currentQuestion ->
+            let
+                currentModel =
+                    { model | currentQuestionNumber = model.currentQuestionNumber + 1 }
+            in
+            ( currentModel, code_heighlight currentModel )
 
-        ClickBack ->
-            if model.currentQuestion > 1 then
-                ( { model | currentQuestion = model.currentQuestion - 1 }, code_heighlight { model | currentQuestion = model.currentQuestion - 1 } )
+        ClickBack currentQuestion ->
+            let
+                currentModel =
+                    { model | currentQuestionNumber = model.currentQuestionNumber - 1 }
 
-            else
-                ( { model | hiddenQuestion = True }, Cmd.none )
+                resultModel =
+                    if model.currentQuestionNumber > 1 then
+                        ( currentModel, code_heighlight currentModel )
+
+                    else
+                        ( { currentModel | hiddenQuestion = True }, Cmd.none )
+            in
+            resultModel
 
         LetPlay ->
-            ( { model | currentQuestion = 1, hiddenQuestion = False }, code_heighlight { model | currentQuestion = 1 } )
+            let
+                currentModel =
+                    { model | currentQuestionNumber = 1, hiddenQuestion = False }
+
+                resultModel =
+                    ( currentModel, code_heighlight currentModel )
+            in
+            resultModel
+
+        InputAnswer answer ->
+            let
+                currentModel =
+                    updateAnswer answer model
+            in
+            ( currentModel, save_answer currentModel )
 
         GetFromJS value ->
             ( { model | version = value }, Cmd.none )
@@ -304,21 +348,18 @@ update msg model =
         SetToJS ->
             ( model, code_heighlight model )
 
-        ChangeAnswer content ->
-            ( model, submit_answer (updateModel model content) )
 
+updateAnswer : String -> QuestionListModel -> QuestionListModel
+updateAnswer answer model =
+    let
+        toggle index question =
+            if index == model.currentQuestionNumber then
+                { question | answer = answer }
 
-
--- TODO: updateModel After Change Answer
-
-
-updateModel model content =
-    case List.head (List.filter (\x -> x.no == model.currentQuestion) model.questions) of
-        Just val ->
-            { val | answer = content }
-
-        Nothing ->
-            initQuestion
+            else
+                question
+    in
+    { model | questions = List.indexedMap toggle model.questions }
 
 
 main =
