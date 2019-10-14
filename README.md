@@ -25,3 +25,28 @@ Data example
 | 7   | Pratawan  | 1007             | Null      | 2017-02-19 | 0000-00-00  | F   |
 | 8   | Padthai   | 1008             | 7         | 2015-05-22 | 0000-00-00  | F   |
 | 9   | Patcharee | 1009             | 7         | 2017-12-15 | 0000-00-00  | F   |
+
+
+We are almost there! The following steps are missing:
+
+    $ cd webapi
+    $ cd assets && npm install && node node_modules/webpack/bin/webpack.js --mode development
+
+Then configure your database in config/dev.exs and run:
+
+    $ mix ecto.create
+
+Start your Phoenix app with:
+
+    $ mix phx.server
+
+You can also run your app inside IEx (Interactive Elixir) as:
+
+    $ iex -S mix phx.server
+
+
+PostgreSQL
+
+    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+    db is webapi_dev
+    https://www.pgadmin.org/

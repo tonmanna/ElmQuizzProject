@@ -8,7 +8,11 @@
         "**/elm-stuff": true,
         ".cache": true,
         "package-lock.json": true,
-        "dist": true
+        "dist": true,
+        "**/deps": true,
+        "**/priv": true,
+        "**/_build": true
+
     },
     "[elm]": {
         "editor.formatOnSave": true

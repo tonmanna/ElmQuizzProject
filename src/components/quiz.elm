@@ -4,11 +4,12 @@ import Browser
 import Html exposing (Html, a, code, div, form, h1, input, label, p, pre, span, text, textarea)
 import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeholder, rows, style, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
+import Http
 import List exposing (..)
 
 
 type alias QuestionListModel =
-    { questions : List Question, currentQuestionNumber : Int, hiddenQuestion : Bool, version : String }
+    { questions : List Question, questionNumber : Int, hiddenQuestion : Bool, candidateID : String }
 
 
 type alias Question =
@@ -21,6 +22,7 @@ type Msg
     | ClickBack Question
     | GetFromJS String
     | InputAnswer String
+    | SubmitAnswer
     | SetToJS
 
 
@@ -160,7 +162,7 @@ initialModel =
         """
           , markdown = """ """
           }
-        , { no = 10
+        , { no = 11
           , title = "ค่าของ x และ y คืออะไร?"
           , answer = ""
           , mermaid = """ """
@@ -170,15 +172,15 @@ initialModel =
           , markdown = """ """
           }
         ]
-    , currentQuestionNumber = 0
+    , questionNumber = 0
     , hiddenQuestion = True
-    , version = "0.0"
+    , candidateID = ""
     }
 
 
 init : String -> ( QuestionListModel, Cmd Msg )
 init flags =
-    ( { initialModel | version = flags }, code_heighlight initialModel )
+    ( initialModel, code_heighlight initialModel )
 
 
 subscriptions : QuestionListModel -> Sub Msg
@@ -192,7 +194,10 @@ port from_js : (String -> message) -> Sub message
 port code_heighlight : QuestionListModel -> Cmd message
 
 
-port save_answer : QuestionListModel -> Cmd message
+port change_answer : QuestionListModel -> Cmd message
+
+
+port submit_answer : QuestionListModel -> Cmd message
 
 
 viewStartBadge : QuestionListModel -> Html Msg
@@ -203,7 +208,7 @@ viewStartBadge model =
         , p []
             [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
         , p []
-            [ label [ class "badge badge-secondary" ] [ text ("Version:" ++ model.version) ] ]
+            [ label [ class "badge badge-secondary" ] [ text "Candidate ID : ", input [ style "padding-left" "5px", type_ "text", value model.candidateID, placeholder "Enter your ID here." ] [] ] ]
         , p []
             [ span [ class "btn btn-primary btn-lg", onClick LetPlay ]
                 [ text "Let's Play »" ]
@@ -219,9 +224,9 @@ viewFinishBadge question showFinishBadge =
         , p []
             [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
         , p []
-            [ input [ class "btn btn-primary btn-lg", type_ "button" ]
+            [ span [ class "btn btn-primary btn-lg", type_ "button", onClick SubmitAnswer ]
                 [ text "Submit exam answer" ]
-            , input [ class "btn btn-warning btn-lg", type_ "button", style "margin-left" "5px", onClick LetPlay ]
+            , span [ class "btn btn-warning btn-lg", type_ "button", style "margin-left" "5px", onClick LetPlay ]
                 [ text " Back " ]
             ]
         ]
@@ -256,8 +261,7 @@ viewQuestion question notShowQuestion =
             , div [ id ("mermaid" ++ String.fromInt question.no) ] []
             , div [ id ("markdown" ++ String.fromInt question.no) ] []
             , pre [] [ code [ id ("code" ++ String.fromInt question.no), class "language-javascript" ] [] ]
-            , textarea [ class "form-control", placeholder "Please enter answer here", rows 5, onInput InputAnswer ]
-                [ text "" ]
+            , input [ type_ "text", class "form-control", placeholder "Please enter answer here", rows 5, onInput InputAnswer, value question.answer ] []
             ]
         , div [ class "container", hidden notShowQuestion ] [ viewNextBack question ]
         ]
@@ -275,7 +279,7 @@ view : QuestionListModel -> Html Msg
 view model =
     let
         currentQuestions =
-            List.filter (\x -> x.no == model.currentQuestionNumber) model.questions
+            List.filter (\x -> x.no == model.questionNumber) model.questions
 
         currentQuestion =
             case List.head currentQuestions of
@@ -289,7 +293,7 @@ view model =
             model.hiddenQuestion || (currentQuestion.title == "FINISH")
 
         showFinishBadge =
-            currentQuestion.title == "FINISH" && not (model.currentQuestionNumber == 0)
+            currentQuestion.title == "FINISH" && not (model.questionNumber == 0)
     in
     div []
         [ div [ class "container", hidden (not model.hiddenQuestion) ]
@@ -307,17 +311,17 @@ update message model =
         ClickNext currentQuestion ->
             let
                 currentModel =
-                    { model | currentQuestionNumber = model.currentQuestionNumber + 1 }
+                    { model | questionNumber = model.questionNumber + 1 }
             in
             ( currentModel, code_heighlight currentModel )
 
         ClickBack currentQuestion ->
             let
                 currentModel =
-                    { model | currentQuestionNumber = model.currentQuestionNumber - 1 }
+                    { model | questionNumber = model.questionNumber - 1 }
 
                 resultModel =
-                    if model.currentQuestionNumber > 1 then
+                    if model.questionNumber > 1 then
                         ( currentModel, code_heighlight currentModel )
 
                     else
@@ -328,7 +332,7 @@ update message model =
         LetPlay ->
             let
                 currentModel =
-                    { model | currentQuestionNumber = 1, hiddenQuestion = False }
+                    { model | questionNumber = 1, hiddenQuestion = False }
 
                 resultModel =
                     ( currentModel, code_heighlight currentModel )
@@ -340,10 +344,13 @@ update message model =
                 currentModel =
                     updateAnswer answer model
             in
-            ( currentModel, save_answer currentModel )
+            ( currentModel, change_answer currentModel )
+
+        SubmitAnswer ->
+            ( model, submit_answer model )
 
         GetFromJS value ->
-            ( { model | version = value }, Cmd.none )
+            ( { model | candidateID = value }, Cmd.none )
 
         SetToJS ->
             ( model, code_heighlight model )
@@ -353,7 +360,7 @@ updateAnswer : String -> QuestionListModel -> QuestionListModel
 updateAnswer answer model =
     let
         toggle index question =
-            if index == model.currentQuestionNumber then
+            if index == model.questionNumber - 1 then
                 { question | answer = answer }
 
             else
