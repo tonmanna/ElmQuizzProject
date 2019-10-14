@@ -5,7 +5,11 @@ import Html exposing (Html, a, code, div, form, h1, input, label, p, pre, span, 
 import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeholder, rows, style, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 import Http
+import Json.Decode exposing (Decoder, at, bool, int, list, string, succeed)
+import Json.Decode.Pipeline exposing (optional, required)
+import Json.Encode as Encode
 import List exposing (..)
+import Random
 
 
 type alias QuestionListModel =
@@ -24,11 +28,37 @@ type Msg
     | InputAnswer String
     | SubmitAnswer
     | SetToJS
+    | GetQuestions (Result Http.Error (List Question))
+
+
+type Status
+    = Loading
+    | Loaded (List Question) String
+    | Errored String
 
 
 initQuestion : Question
 initQuestion =
     { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "" }
+
+
+initialCmd : Cmd Msg
+initialCmd =
+    Http.get
+        { url = "http://localhost:4000/api/v1/users"
+        , expect = Http.expectJson GetQuestions (list questionDecoder)
+        }
+
+
+questionDecoder : Decoder Question
+questionDecoder =
+    succeed Question
+        |> required "no" int
+        |> optional "title" string "(untitled)"
+        |> optional "answer" string "(untitled)"
+        |> optional "mermaid" string "(untitled)"
+        |> optional "code" string "(untitled)"
+        |> optional "markdown" string "(untitled)"
 
 
 initialModel : QuestionListModel
@@ -180,7 +210,7 @@ initialModel =
 
 init : String -> ( QuestionListModel, Cmd Msg )
 init flags =
-    ( initialModel, code_heighlight initialModel )
+    ( initialModel, Cmd.batch [ code_heighlight initialModel, initialCmd ] )
 
 
 subscriptions : QuestionListModel -> Sub Msg
@@ -354,6 +384,17 @@ update message model =
 
         SetToJS ->
             ( model, code_heighlight model )
+
+        GetQuestions (Ok questions) ->
+            case questions of
+                first :: rest ->
+                    ( model, Cmd.none )
+
+                [] ->
+                    ( model, Cmd.none )
+
+        GetQuestions (Err httpError) ->
+            ( model, Cmd.none )
 
 
 updateAnswer : String -> QuestionListModel -> QuestionListModel
