@@ -50,3 +50,6 @@ PostgreSQL
     docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
     db is webapi_dev
     https://www.pgadmin.org/
+
+DEMO Site:
+https://hungry-jackson-0a5da9.netlify.com/
