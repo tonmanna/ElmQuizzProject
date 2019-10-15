@@ -24,10 +24,11 @@ type Msg
     = LetPlay
     | ClickNext Question
     | ClickBack Question
+    | ClickSubmit
     | GetFromJS String
     | InputAnswer String
-    | SubmitAnswer
     | SetToJS
+    | SubmitAnswer (Result Http.Error String)
     | GetQuestions (Result Http.Error (List Question))
 
 
@@ -45,8 +46,17 @@ initQuestion =
 initialCmd : Cmd Msg
 initialCmd =
     Http.get
-        { url = "http://localhost:4000/api/v1/users"
+        { url = "http://localhost:4000/api/v1/getAllQuestion"
         , expect = Http.expectJson GetQuestions (list questionDecoder)
+        }
+
+
+submitCmd : Cmd Msg
+submitCmd =
+    Http.post
+        { url = "http://localhost:4000/api/v1/submitAnswer"
+        , body = Http.emptyBody
+        , expect = Http.expectJson SubmitAnswer string
         }
 
 
@@ -254,7 +264,7 @@ viewFinishBadge question showFinishBadge =
         , p []
             [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
         , p []
-            [ span [ class "btn btn-primary btn-lg", type_ "button", onClick SubmitAnswer ]
+            [ span [ class "btn btn-primary btn-lg", type_ "button", onClick ClickSubmit ]
                 [ text "Submit exam answer" ]
             , span [ class "btn btn-warning btn-lg", type_ "button", style "margin-left" "5px", onClick LetPlay ]
                 [ text " Back " ]
@@ -376,8 +386,8 @@ update message model =
             in
             ( currentModel, change_answer currentModel )
 
-        SubmitAnswer ->
-            ( model, submit_answer model )
+        ClickSubmit ->
+            ( model, Cmd.batch [ submit_answer model, submitCmd ] )
 
         GetFromJS value ->
             ( { model | candidateID = value }, Cmd.none )
@@ -394,6 +404,12 @@ update message model =
                     ( model, Cmd.none )
 
         GetQuestions (Err httpError) ->
+            ( model, Cmd.none )
+
+        SubmitAnswer (Ok questions) ->
+            ( model, Cmd.none )
+
+        SubmitAnswer (Err httpError) ->
             ( model, Cmd.none )
 
 

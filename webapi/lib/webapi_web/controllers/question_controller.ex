@@ -1,21 +1,24 @@
-defmodule WebapiWeb.UserController do
+defmodule WebapiWeb.QuestionController do
   use WebapiWeb, :controller
-  def index(conn, _params) do
-      # users: [
-      #   %{name: "Joe",
-      #     email: "joe@example.com",
-      #     password: "topsecret",
-      #     stooge: "moe"},
-      #   %{name: "Anne",
-      #     email: "anne@example.com",
-      #     password: "guessme",
-      #     stooge: "larry"},
-      #   %{name: "Franklin",
-      #     email: "franklin@example.com",
-      #     password: "guessme",
-      #     stooge: "curly"},
-      # ]
-      users = [
+  def submitAnswer(conn, _params) do 
+    users = [
+          %{name: "Joe",
+            email: "joe@example.com",
+            password: "topsecret",
+            stooge: "moe"},
+          %{name: "Anne",
+            email: "anne@example.com",
+            password: "guessme",
+            stooge: "larry"},
+          %{name: "Franklin",
+            email: "franklin@example.com",
+            password: "guessme",
+            stooge: "curly"},
+        ]
+    json conn, users
+  end
+  def getAllQuestion(conn, _params) do
+      questions = [
         %{ no: 1,
            title: "หลังจากรันโค้ดต่อไปนี้ สิ่งใดจะพิมพ์ไปบน console ?",
            answer: "",
@@ -57,6 +60,6 @@ defmodule WebapiWeb.UserController do
            """,
           }
       ]
-      json conn, users
+      json conn, questions
   end
 end
