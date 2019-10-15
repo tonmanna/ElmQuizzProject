@@ -1,5 +1,6 @@
 # Fizz Buzz
     Players generally sit in a circle. The player designated to go first says the number "1", and each player thenceforth counts one number in turn. However, any number divisible by three is replaced by the word fizz and any divisible by five by the word buzz. Numbers divisible by 15, which is both become fizz buzz. A player who hesitates or makes a mistake is eliminated from the game.
+https://github.com/iTopPlus/ExamJSTDD
 
     For example, a typical round of fizz buzz would start as follows:
 
@@ -50,3 +51,6 @@ PostgreSQL
     docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
     db is webapi_dev
     https://www.pgadmin.org/
+
+DEMO Site:
+https://hungry-jackson-0a5da9.netlify.com/
