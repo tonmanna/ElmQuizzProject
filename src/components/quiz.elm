@@ -1,11 +1,11 @@
 port module SimpleQuizz exposing (..)
 
 import Browser
-import Html exposing (Html, a, code, div, form, h1, input, label, p, pre, span, text, textarea)
+import Html exposing (Html, a, code, div, form, h1, h3, input, label, p, pre, span, text, textarea)
 import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeholder, rows, style, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
-import Http
-import Json.Decode exposing (Decoder, at, bool, int, list, nullable, string, succeed)
+import Http exposing (..)
+import Json.Decode exposing (Decoder, Error, at, bool, int, list, nullable, string, succeed)
 import Json.Decode.Pipeline exposing (optional, required)
 import Json.Encode as Encode
 import List exposing (..)
@@ -13,11 +13,11 @@ import Random
 
 
 type alias QuestionListModel =
-    { questions : List Question, questionNumber : Int, hiddenQuestion : Bool, candidateID : String }
+    { questions : List Question, questionNumber : Int, hiddenQuestion : Bool, candidateID : String, errorMessage : String }
 
 
 type alias Question =
-    { no : Int, title : String, answer : String, mermaid : String, code : String, markdown : String }
+    { no : Int, title : String, answer : String, mermaid : String, code : String, markdown : Maybe String }
 
 
 type Msg
@@ -32,15 +32,9 @@ type Msg
     | GetQuestions (Result Http.Error (List Question))
 
 
-type Status
-    = Loading
-    | Loaded (List Question) String
-    | Errored String
-
-
 initQuestion : Question
 initQuestion =
-    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "" }
+    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = Just "" }
 
 
 initialCmd : Cmd Msg
@@ -68,7 +62,32 @@ questionDecoder =
         |> required "answer" string
         |> required "mermaid" string
         |> required "code" string
-        |> required "markdown" string
+        |> required "markdown" (nullable string)
+
+
+errorToString : Http.Error -> String
+errorToString error =
+    case error of
+        BadUrl url ->
+            "The URL " ++ url ++ " was invalid"
+
+        Timeout ->
+            "Unable to reach the server, try again"
+
+        NetworkError ->
+            "Unable to reach the server, check your network connection"
+
+        BadStatus 500 ->
+            "The server had a problem, try again later"
+
+        BadStatus 400 ->
+            "Verify your information and try again"
+
+        BadStatus _ ->
+            "Unknown error"
+
+        BadBody errorMessage ->
+            errorMessage
 
 
 initialModel : QuestionListModel
@@ -77,6 +96,7 @@ initialModel =
     , questionNumber = 0
     , hiddenQuestion = True
     , candidateID = ""
+    , errorMessage = ""
     }
 
 
@@ -118,11 +138,11 @@ viewStartBadge model =
         ]
 
 
-viewFinishBadge : Question -> Bool -> Html Msg
-viewFinishBadge question showFinishBadge =
+viewFinishBadge : Question -> Bool -> String -> Html Msg
+viewFinishBadge question showFinishBadge errorMessage =
     div [ class "container", hidden (not showFinishBadge) ]
-        [ h1 [ class "display-12" ]
-            [ text question.title ]
+        [ h1 [ class "display-12" ] [ text question.title ]
+        , h3 [] [ text errorMessage ]
         , p []
             [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
         , p []
@@ -203,7 +223,7 @@ view model =
             , viewDownloadLink
             ]
         , div [ class "container", hidden notShowQuestion ] [ viewQuestion currentQuestion notShowQuestion ]
-        , viewFinishBadge currentQuestion showFinishBadge
+        , viewFinishBadge currentQuestion showFinishBadge model.errorMessage
         ]
 
 
@@ -266,7 +286,7 @@ update message model =
                     ( model, Cmd.none )
 
         GetQuestions (Err httpError) ->
-            ( model, Cmd.none )
+            ( { model | errorMessage = errorToString httpError }, Cmd.none )
 
         SubmitAnswer (Ok questions) ->
             ( model, Cmd.none )

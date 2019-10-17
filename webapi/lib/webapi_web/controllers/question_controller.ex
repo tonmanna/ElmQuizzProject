@@ -164,8 +164,6 @@ defmodule WebapiWeb.QuestionController do
                 }
                 asyncJob();
            """,
-           markdown: """
-           """,
           },
         %{ no: 11,
            title: "ค่าของ x และ y คืออะไร?",
