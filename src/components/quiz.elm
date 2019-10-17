@@ -386,14 +386,14 @@ update message model =
             in
             ( currentModel, change_answer currentModel )
 
-        ClickSubmit ->
-            ( model, Cmd.batch [ submit_answer model, submitCmd ] )
-
         GetFromJS value ->
             ( { model | candidateID = value }, Cmd.none )
 
         SetToJS ->
             ( model, code_heighlight model )
+
+        ClickSubmit ->
+            ( model, Cmd.batch [ submit_answer model, submitCmd ] )
 
         GetQuestions (Ok questions) ->
             case questions of
