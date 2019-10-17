@@ -6,7 +6,7 @@ import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeh
 import Html.Events exposing (onClick, onInput, onSubmit)
 import Http
 import Json.Decode exposing (Decoder, at, bool, int, list, string, succeed)
-import Json.Decode.Pipeline exposing (optional, required)
+import Json.Decode.Pipeline exposing (map, optional, required)
 import Json.Encode as Encode
 import List exposing (..)
 import Random
@@ -64,11 +64,11 @@ questionDecoder : Decoder Question
 questionDecoder =
     succeed Question
         |> required "no" int
-        |> optional "title" string "(untitled)"
-        |> optional "answer" string "(untitled)"
-        |> optional "mermaid" string "(untitled)"
-        |> optional "code" string "(untitled)"
-        |> optional "markdown" string "(untitled)"
+        |> required "title" string
+        |> required "answer" (nullable string)
+        |> required "mermaid" (nullable string)
+        |> required "code" (nullable string)
+        |> required "markdown" (nullable string)
 
 
 initialModel : QuestionListModel
