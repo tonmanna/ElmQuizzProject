@@ -5,8 +5,8 @@ import Html exposing (Html, a, code, div, form, h1, input, label, p, pre, span, 
 import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeholder, rows, style, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 import Http
-import Json.Decode exposing (Decoder, at, bool, int, list, string, succeed)
-import Json.Decode.Pipeline exposing (map, optional, required)
+import Json.Decode exposing (Decoder, at, bool, int, list, nullable, string, succeed)
+import Json.Decode.Pipeline exposing (optional, required)
 import Json.Encode as Encode
 import List exposing (..)
 import Random
@@ -65,153 +65,15 @@ questionDecoder =
     succeed Question
         |> required "no" int
         |> required "title" string
-        |> required "answer" (nullable string)
-        |> required "mermaid" (nullable string)
-        |> required "code" (nullable string)
-        |> required "markdown" (nullable string)
+        |> required "answer" string
+        |> required "mermaid" string
+        |> required "code" string
+        |> required "markdown" string
 
 
 initialModel : QuestionListModel
 initialModel =
-    { questions =
-        [ { no = 1
-          , title = "หลังจากรันโค้ดต่อไปนี้ สิ่งใดจะพิมพ์ไปบน console ?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    var x = 5;
-    const foo = {
-        x: 100,
-        getX() {
-            return this.x;
-        }
-    };
-    const bar = {
-        x: 20
-    };
-    bar.getX = foo.getX;
-    console.log(bar.getX());
-        """
-          , markdown = """ """
-          }
-        , { no = 2
-          , title = "หลังจากรันโค้ดต่อไปนี้ ข้อความใดจะพิมพ์บน console ?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    const basket = {
-        apple: 2,
-        banana: 4,
-        orange: 6,
-        strawberry: 8
-    }
-    for (const fruit in basket) {
-        console.log(fruit);
-    }
-        """
-          , markdown = """ """
-          }
-        , { no = 3
-          , title = "ผลลัพธ์ของ 10 % 5 คืออะไร ?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    var result =  10 % 5;
-        """
-          , markdown = """ """
-          }
-        , { no = 4
-          , title = "ค่าของ x คืออะไร ?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    let x = 1 + "2";
-        """
-          , markdown = """ """
-          }
-        , { no = 5
-          , title = "คำสั่งใดมีผลทำให้ตัวแปร result เป็นตัวพิมพ์เล็กทั้งหมด ?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    let result = 'Hello World';
-        """
-          , markdown = """ """
-          }
-        , { no = 6
-          , title = "คำสั่งที่ใช้สำหรับการขึ้นบรรทัดใหม่ในสตริง?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """ """
-          , markdown = """ """
-          }
-        , { no = 7
-          , title = "หลังจากรันโค้ดต่อไปนี้ ข้อความใดจะพิมพ์บน console ?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    const fruits = ["apple", "banana", "strawberry"];
-    fruits
-        .map((fruit) => "amazing " + fruit)
-        .forEach((fruit) => {
-            console.log(fruit);
-        })
-        """
-          , markdown = """ """
-          }
-        , { no = 8
-          , title = "หลังจากรันโค้ดต่อไปนี้ ข้อความใดจะพิมพ์บน console ?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    const fruits = ["apple", "banana", "strawberry"];
-    fruits
-        .filter((fruit) => fruit.length > 5)
-        .forEach((fruit) => {
-            console.log(fruit);
-        })
-        """
-          , markdown = """ """
-          }
-        , { no = 9
-          , title = "คำสั่งใด ทำให้สามารถพิมพ์ชื่อและนามสกุลไปที่ console ได้ ?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    let person = {
-        firstName: "Worawut",
-        lastName: "Boonton",
-        fullName: function() {
-            return this.firstName + " " + this.lastName;
-        }
-    };
-        """
-          , markdown = """ """
-          }
-        , { no = 10
-          , title = "จงอธิบายการทำงานของโค้ดด้านล่าง"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    function asyncJob() {
-        console.log("Fetching");
-        await fetchUserData(); // `fetchUserData` returns an instace of Promise
-        console.log("Fetched");
-    }
-    asyncJob();
-        """
-          , markdown = """ """
-          }
-        , { no = 11
-          , title = "ค่าของ x และ y คืออะไร?"
-          , answer = ""
-          , mermaid = """ """
-          , code = """
-    let x,y = 36;
-        """
-          , markdown = """ """
-          }
-        ]
+    { questions = []
     , questionNumber = 0
     , hiddenQuestion = True
     , candidateID = ""
@@ -398,7 +260,7 @@ update message model =
         GetQuestions (Ok questions) ->
             case questions of
                 first :: rest ->
-                    ( model, Cmd.none )
+                    ( { model | questions = questions }, Cmd.none )
 
                 [] ->
                     ( model, Cmd.none )
