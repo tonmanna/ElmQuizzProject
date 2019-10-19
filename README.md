@@ -48,8 +48,9 @@ You can also run your app inside IEx (Interactive Elixir) as:
 
 PostgreSQL
 
-    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+    docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=tbdadmin -d -v data:/var/lib/postgresql/data -v /c/temp:/temp postgres
     db is webapi_dev
+    docker run -it -v c:\\temp:/temp --name gcloud google/cloud-sdk sh
     https://www.pgadmin.org/
 
 DEMO Site:
