@@ -52,6 +52,9 @@ PostgreSQL
     db is webapi_dev
     docker run -it -v c:\\temp:/temp --name gcloud google/cloud-sdk sh
     https://www.pgadmin.org/
+    When have a problem with duplicate with Users
+    mix ecto.migrate --step 1 
+    https://cloud.google.com/community/tutorials/elixir-phoenix-on-google-app-engine
 
 DEMO Site:
 https://hungry-jackson-0a5da9.netlify.com/
