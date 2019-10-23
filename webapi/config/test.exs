@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :webapi, Webapi.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "root",
+  password: "",
   database: "webapi_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

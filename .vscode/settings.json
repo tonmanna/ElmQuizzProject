@@ -10,7 +10,7 @@
         "package-lock.json": true,
         "dist": true,
         "**/deps": true,
-        "**/priv": true,
+        "**/priv": false,
         "**/_build": true
 
     },

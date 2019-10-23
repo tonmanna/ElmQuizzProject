@@ -40,7 +40,7 @@ defmodule WebapiWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_webapi_key",
-    signing_salt: "YE1nZOXb"
+    signing_salt: "kZKBWZao"
 
   plug WebapiWeb.Router
 end

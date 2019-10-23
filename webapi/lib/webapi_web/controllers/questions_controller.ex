@@ -1,4 +1,4 @@
-defmodule WebapiWeb.QuestionController do
+defmodule WebapiWeb.QuestionsController do
   use WebapiWeb,:controller
   def submitAnswer(conn, _params) do 
     users = [

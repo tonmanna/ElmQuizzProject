@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :webapi, Webapi.Repo,
-  username: "postgres",
+  username: "root",
   password: "tbdadmin",
   database: "webapi_dev",
-  hostname: "10.0.75.2",
+  hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

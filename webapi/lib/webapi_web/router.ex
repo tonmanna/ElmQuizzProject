@@ -21,8 +21,8 @@ defmodule WebapiWeb.Router do
 
   scope "/api/v1", WebapiWeb do
       pipe_through :api
-      get "/getAllQuestion", QuestionController, :getAllQuestion
-      post "/submitAnswer", QuestionController, :submitAnswer 
+      get "/getAllQuestion", QuestionsController, :getAllQuestion
+      post "/submitAnswer", QuestionsController, :submitAnswer 
   end
   
   # Other scopes may use custom stacks.

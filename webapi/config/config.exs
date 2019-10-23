@@ -13,7 +13,7 @@ config :webapi,
 # Configures the endpoint
 config :webapi, WebapiWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "9F0xIuptIgQHv9puvPY3HqugIIhR22vHNHdX7lMXzTR1kLJzcw48dQc7sbLs9zwh",
+  secret_key_base: "CqcH+YYjdleiXEzxi3zJM/LZT/+8iizIc4+SXLZmk57DD5a5Iu5gWbAWUDnWUFFQ",
   render_errors: [view: WebapiWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Webapi.PubSub, adapter: Phoenix.PubSub.PG2]
 
