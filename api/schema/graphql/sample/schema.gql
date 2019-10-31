@@ -1,0 +1,8 @@
+type SampleMessage {
+  name: String
+  message: String
+}
+
+type Query {
+    getData: SampleMessage    
+}

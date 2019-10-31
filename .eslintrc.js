@@ -6,25 +6,20 @@ module.exports = {
   },
   parserOptions: {
     sourceType: "module",
-    ecmaVersion: 2017
+    ecmaVersion: 2018
   },
-  extends: ["eslint:recommended"],
+  extends: ["eslint:recommended", "plugin:react/recommended"],
   rules: {
     "new-cap": "off",
     "no-console": "off",
     camelcase: "off",
     "no-return-await": "off",
-    eqeqeq: "off"
+    eqeqeq: "off",
+    quotes: ["error", "single"],
+    semi: ["error", "always"],
+    "no-unused-vars": ["warn"]
   },
   globals: {
-    jest: true,
-    describe: true,
-    test: true,
-    expect: true,
-    $: true,
-    Prism: true,
-    mermaid: true,
-    localforage: true,
-    document: true
+    jest: true
   }
 };
