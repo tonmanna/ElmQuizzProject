@@ -1,10 +1,10 @@
 {
   "name": "elm_elixir_lab1",
-  "version": "1.0.0",
+  "version": "10.16.2",
   "description": "",
   "main": "index.js",
   "devDependencies": {
-    "elm": "^0.19.0-no-deps",
+    "elm": "^0.19.1",
     "elm-hot": "^1.1.2",
     "node-elm-compiler": "^5.0.4"
   },
