@@ -1,0 +1,11 @@
+type Quiz {
+    no: Int
+    title: String
+    answer: String
+    code: String
+    markdown: String
+}
+
+type Query {
+  getQuiz: [Quiz]
+}
