@@ -32,33 +32,5 @@ Data example
 | 8 | Padthai | 1008 | 7 | 2015-05-22 | 0000-00-00 | F |
 | 9 | Patcharee | 1009 | 7 | 2017-12-15 | 0000-00-00 | F |
 
-We are almost there! The following steps are missing:
-
-    $ cd webapi
-    $ cd assets && npm install && node node_modules/webpack/bin/webpack.js --mode development
-
-Then configure your database in config/dev.exs and run:
-
-    $ mix ecto.create
-
-Start your Phoenix app with:
-
-    $ mix phx.server
-
-You can also run your app inside IEx (Interactive Elixir) as:
-
-    $ iex -S mix phx.server
-
-PostgreSQL
-
-    docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=tbdadmin -d -v data:/var/lib/postgresql/data -v //c/temp:/temp postgres
-    docker run --name mysql -e MYSQL_ROOT_PASSWORD=tbdadmin -v mysql_phoenix:/var/lib/mysql -p 3306:3306 -d mysql
-    db is webapi_dev
-    docker run -it -v c:\\temp:/temp --name gcloud google/cloud-sdk sh
-    https://www.pgadmin.org/
-    When have a problem with duplicate with Users
-    mix ecto.migrate --step 1
-    https://cloud.google.com/community/tutorials/elixir-phoenix-on-google-app-engine
-
 DEMO Site:
 https://hungry-jackson-0a5da9.netlify.com/
