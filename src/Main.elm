@@ -162,20 +162,20 @@ viewDownloadLink =
     div []
         [ p [ class "text-bold-load" ] [ text "Download Programmer" ]
         , p []
-            [ text "Exam JS TDD:"
+            [ text "Exam JS TDD (Junior Developer):"
             , a [ href "https://github.com/iTopPlus/ExamJSTDD" ] [ text "Exam JS TDD" ]
             ]
         , p [ class "text-bold-load" ] [ text "Download" ]
         , p []
-            [ text "ClosePackage Lab:"
+            [ text "ClosePackage Lab (Resource for Data Sci):"
             , a [ href "/assets/exam/ClosePackage_Q2.xlsx" ] [ text "Excel Test Exam I(Close Job)" ]
             ]
         , p []
-            [ text "Test Website Lab:"
+            [ text "Test Website Lab (Resource for Data Sci):"
             , a [ href "/assets/exam/Test_Website.xlsx" ] [ text "Excel Test Exam II (Test_Website Job)" ]
             ]
-        , p []
-            [ text "Exam for Full Stack Developer."
+        , p [ class "text-bold-load" ]
+            [ text "Exam question (Full Stack Developer):"
             , div []
                 [ img [ src "/assets/exam/Puneet.svg", style "width" "100%" ] []
                 ]
