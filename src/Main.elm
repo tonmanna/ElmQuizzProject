@@ -1,8 +1,8 @@
 port module Main exposing (..)
 
 import Browser
-import Html exposing (Html, a, code, div, form, h1, h3, input, label, p, pre, span, text, textarea)
-import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeholder, rows, style, type_, value)
+import Html exposing (Html, a, code, div, form, h1, h3, img, input, label, p, pre, span, text, textarea)
+import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeholder, rows, src, style, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 import Http exposing (..)
 import Json.Decode exposing (Decoder, Error, at, bool, int, list, nullable, string, succeed)
@@ -122,6 +122,9 @@ port change_answer : QuestionListModel -> Cmd message
 port submit_answer : QuestionListModel -> Cmd message
 
 
+port getQuestionFromGraphQL : (Json.Decode.Value -> msg) -> Sub msg
+
+
 viewStartBadge : QuestionListModel -> Html Msg
 viewStartBadge model =
     div []
@@ -170,6 +173,12 @@ viewDownloadLink =
         , p []
             [ text "Test Website Lab:"
             , a [ href "/assets/exam/Test_Website.xlsx" ] [ text "Excel Test Exam II (Test_Website Job)" ]
+            ]
+        , p []
+            [ text "Example for Full Stack Developer."
+            , div []
+                [ img [ src "/assets/exam/Puneet.svg" ] []
+                ]
             ]
         ]
 

@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "devDependencies": {
+    "@types/jest": "^24.0.19",
     "elm": "^0.19.1",
     "elm-hot": "^1.1.2",
-    "node-elm-compiler": "^5.0.4",
-    "@types/jest": "^24.0.19",
     "eslint": "^6.5.1",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-html": "^6.0.0",
@@ -17,6 +16,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^24.9.0",
     "markdown-it": "^10.0.0",
+    "node-elm-compiler": "^5.0.4",
     "parcel-bundler": "^1.12.3",
     "prismjs": "^1.17.1"
   },
@@ -30,9 +30,15 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^16.1.7",
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-link-http": "^1.5.16",
+    "apollo-link-ws": "^1.0.19",
     "apollo-server": "^2.9.7",
     "apollo-server-express": "^2.9.7",
     "express": "^4.17.1",
-    "graphql": "^14.5.8"
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.1",
+    "subscriptions-transport-ws": "^0.9.16"
   }
 }
