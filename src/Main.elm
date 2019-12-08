@@ -175,9 +175,9 @@ viewDownloadLink =
             , a [ href "/assets/exam/Test_Website.xlsx" ] [ text "Excel Test Exam II (Test_Website Job)" ]
             ]
         , p []
-            [ text "Example for Full Stack Developer."
+            [ text "Exam for Full Stack Developer."
             , div []
-                [ img [ src "/assets/exam/Puneet.svg" ] []
+                [ img [ src "/assets/exam/Puneet.svg", style "width" "100%" ] []
                 ]
             ]
         ]
