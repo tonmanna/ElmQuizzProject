@@ -18,7 +18,7 @@
     "markdown-it": "^10.0.0",
     "node-elm-compiler": "^5.0.4",
     "parcel-bundler": "^1.12.3",
-    "prismjs": "^1.17.1"
+    "prismjs": "^1.21.0"
   },
   "scripts": {
     "dev": "elm reactor",
