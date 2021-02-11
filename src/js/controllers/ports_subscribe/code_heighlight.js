@@ -27,6 +27,7 @@ function renderMarkDownIT(content, model) {
   var mdHtml = md.render(content.markdown);
   $(markdownID).empty();
   $(markdownID).append(mdHtml);
+  console.log('mdHtml: ', mdHtml);
 }
 
 function renderMermaid(content, model) {
@@ -39,7 +40,6 @@ function renderMermaid(content, model) {
   $(prevMermaidID).empty();
   $(lastMermaidID).empty();
   if (content.mermaid.length > 5) {
-    console.log('content: ', content);
     mermaid.render(svgID, content.mermaid, function (element) {
       $(mermaidID).append(element);
     });
