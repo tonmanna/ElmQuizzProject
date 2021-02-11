@@ -2,7 +2,7 @@ const _ = require('lodash');
 const makeExecutableSchema = require('graphql-tools').makeExecutableSchema;
 
 const quiz_type_defs = require('./quiz');
-const quiz_resolver = require('../controllers/quiz');
+const { resolver } = require('../controllers/quiz');
 // ------------------------------
 
 var typeDefs = '';
@@ -11,7 +11,7 @@ typeDefs = typeDefs.concat(
 );
 
 var resolvers = {};
-resolvers = _.merge(resolvers, quiz_resolver);
+resolvers = _.merge(resolvers, resolver);
 
 exports.schema = makeExecutableSchema({
   typeDefs,

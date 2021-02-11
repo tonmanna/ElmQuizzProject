@@ -1,15 +1,14 @@
 port module Main exposing (..)
 
 import Browser
-import Html exposing (Html, a, code, div, form, h1, h3, img, input, label, p, pre, span, text, textarea)
-import Html.Attributes exposing (attribute, class, for, hidden, href, id, placeholder, rows, src, style, type_, value)
-import Html.Events exposing (onClick, onInput, onSubmit)
+import Html exposing (Html, a, code, div, h1, h3, img, input, label, p, pre, span, text)
+import Html.Attributes exposing ( class, for, hidden, href, id, placeholder, rows, src, style, type_, value)
+import Html.Events exposing (onClick, onInput)
 import Http exposing (..)
-import Json.Decode exposing (Decoder, Error, at, bool, int, list, nullable, string, succeed)
-import Json.Decode.Pipeline exposing (optional, required)
-import Json.Encode as Encode
+import Json.Decode exposing (Decoder, int, list, nullable, string, succeed)
+import Json.Decode.Pipeline exposing ( required)
 import List exposing (..)
-import Random
+import Html exposing (textarea)
 
 
 type alias QuestionListModel =
@@ -40,7 +39,7 @@ initQuestion =
 initialCmd : Cmd Msg
 initialCmd =
     Http.get
-        { url = "http://localhost:4000/api/v1/getAllQuestion"
+        { url = "http://localhost:4000/getQuiz"
         , expect = Http.expectJson GetQuestions (list questionDecoder)
         }
 
@@ -48,7 +47,7 @@ initialCmd =
 submitCmd : Cmd Msg
 submitCmd =
     Http.post
-        { url = "http://localhost:4000/api/v1/submitAnswer"
+        { url = "http://localhost:4000/submitAnswer"
         , body = Http.emptyBody
         , expect = Http.expectJson SubmitAnswer string
         }
@@ -192,7 +191,7 @@ viewQuestion question notShowQuestion =
             , div [ id ("mermaid" ++ String.fromInt question.no) ] []
             , div [ id ("markdown" ++ String.fromInt question.no) ] []
             , pre [] [ code [ id ("code" ++ String.fromInt question.no), class "language-javascript" ] [] ]
-            , input [ type_ "text", class "form-control", placeholder "Please enter answer here", rows 5, onInput InputAnswer, value question.answer ] []
+            , textarea [ class "form-control", placeholder "Please enter answer here", rows 5, onInput InputAnswer, value question.answer ] []
             ]
         , div [ class "container", hidden notShowQuestion ] [ viewNextBack question ]
         ]
@@ -317,6 +316,7 @@ updateAnswer answer model =
     { model | questions = List.indexedMap toggle model.questions }
 
 
+main : Program String QuestionListModel Msg
 main =
     Browser.element
         { init = init

@@ -4,7 +4,7 @@ const md = new MarkdownIt();
 export default model => {
   var content = model.questions[model.questionNumber - 1];
   if (model.questionNumber != 0 && content != undefined) {
-    setTimeout(function() {
+    setTimeout(function () {
       renderMermaid(content, model);
       renderPrism(content, model);
       renderMarkDownIT(content, model);
@@ -39,7 +39,8 @@ function renderMermaid(content, model) {
   $(prevMermaidID).empty();
   $(lastMermaidID).empty();
   if (content.mermaid.length > 5) {
-    mermaid.render(svgID, content.mermaid, function(element) {
+    console.log('content: ', content);
+    mermaid.render(svgID, content.mermaid, function (element) {
       $(mermaidID).append(element);
     });
   }

@@ -5,8 +5,7 @@ const getQuiz = () =>
                 no: 1,
                 title: "หลังจากรันโค้ดต่อไปนี้ สิ่งใดจะพิมพ์ไปบน console ?",
                 answer: "",
-                mermaid: ` 
-               `,
+                mermaid: ``,
                 code: `
                     var x: 5;
                     const foo: {
@@ -27,8 +26,7 @@ const getQuiz = () =>
                 no: 2,
                 title: "หลังจากรันโค้ดต่อไปนี้ ข้อความใดจะพิมพ์บน console ?",
                 answer: "",
-                mermaid: `
-               `,
+                mermaid: ``,
                 code: `
                     const basket: {
                         apple: 2,
@@ -47,8 +45,7 @@ const getQuiz = () =>
                 no: 3,
                 title: "ผลลัพธ์ของ 10 5 คืออะไร ?",
                 answer: "",
-                mermaid: `
-               `,
+                mermaid: ``,
                 code: `
                     var result:  10 5;
                `,
@@ -59,8 +56,7 @@ const getQuiz = () =>
                 no: 4,
                 title: "ค่าของ x คืออะไร ?",
                 answer: "",
-                mermaid: `
-               `,
+                mermaid: ``,
                 code: `
                     let x: 1 + "2";
                `,
@@ -71,8 +67,7 @@ const getQuiz = () =>
                 no: 5,
                 title: "คำสั่งใดมีผลทำให้ตัวแปร result เป็นตัวพิมพ์เล็กทั้งหมด ?",
                 answer: "",
-                mermaid: `
-               `,
+                mermaid: ``,
                 code: `
                     let result: 'Hello World';
                `,
@@ -83,8 +78,7 @@ const getQuiz = () =>
                 no: 6,
                 title: "คำสั่งที่ใช้สำหรับการขึ้นบรรทัดใหม่ในสตริง?",
                 answer: "",
-                mermaid: `
-               `,
+                mermaid: ``,
                 code: `
                `,
                 markdown: `
@@ -94,8 +88,7 @@ const getQuiz = () =>
                 no: 7,
                 title: "หลังจากรันโค้ดต่อไปนี้ ข้อความใดจะพิมพ์บน console ?",
                 answer: "",
-                mermaid: `
-               `,
+                mermaid: ``,
                 code: `
                     const fruits: ["apple", "banana", "strawberry"];
                     fruits
@@ -111,8 +104,7 @@ const getQuiz = () =>
                 no: 8,
                 title: "หลังจากรันโค้ดต่อไปนี้ ข้อความใดจะพิมพ์บน console ?",
                 answer: "",
-                mermaid: `
-               `,
+                mermaid: ``,
                 code: `
                     const fruits: ["apple", "banana", "strawberry"];
                     fruits
@@ -128,8 +120,7 @@ const getQuiz = () =>
                 no: 9,
                 title: "คำสั่งใด ทำให้สามารถพิมพ์ชื่อและนามสกุลไปที่ console ได้ ?",
                 answer: "",
-                mermaid: `
-                `,
+                mermaid: ``,
                 code: `
                     let person: {
                         firstName: "Worawut",
@@ -146,8 +137,7 @@ const getQuiz = () =>
                 no: 10,
                 title: "จงอธิบายการทำงานของโค้ดด้านล่าง",
                 answer: "",
-                mermaid: `
-               `,
+                mermaid: ``,
                 code: `
                     function asyncJob() {
                         console.log("Fetching");
@@ -163,13 +153,39 @@ const getQuiz = () =>
                 no: 11,
                 title: "ค่าของ x และ y คืออะไร?",
                 answer: "",
-                mermaid: `
-               `,
+                mermaid: ``,
                 code: `
                     let x,y: 36;
                `,
                 markdown: `
                `
+            }, {
+                no: 12,
+                title: "จงสร้าง Code ตาม Class Diagram นี้",
+                answer: "",
+                mermaid: `classDiagram
+                Animal <|-- Duck
+                Animal <|-- Fish
+                Animal <|-- Zebra
+                Animal : int age
+                Animal : String gender
+                Animal: isMammal()
+                Animal: mate()
+                class Duck{
+                    String beakColor
+                    swim()
+                    quack()
+                }
+                class Fish{
+                    int sizeInFeet
+                    canEat()
+                }
+                class Zebra{
+                    boolean is_wild
+                    run()
+                }`,
+                code: ``,
+                markdown: `### Code เป็นภาษาอะไรก็ได้ในสามตัวเลือก TS, Java , C#`
             }
         ])
     })
