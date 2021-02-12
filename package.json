@@ -38,6 +38,7 @@
     "express": "^4.17.1",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
+    "elm": "0.19.1-5",
     "subscriptions-transport-ws": "^0.9.16"
   }
 }
