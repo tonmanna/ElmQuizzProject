@@ -39,7 +39,7 @@ initQuestion =
 initialCmd : Cmd Msg
 initialCmd =
     Http.get
-        { url = "http://localhost:4000/getQuiz"
+        { url = "https://elmquiz.herokuapp.com/getQuiz"
         , expect = Http.expectJson GetQuestions (list questionDecoder)
         }
 
@@ -47,7 +47,7 @@ initialCmd =
 submitCmd : Cmd Msg
 submitCmd =
     Http.post
-        { url = "http://localhost:4000/submitAnswer"
+        { url = "https://elmquiz.herokuapp.com/submitAnswer"
         , body = Http.emptyBody
         , expect = Http.expectJson SubmitAnswer string
         }

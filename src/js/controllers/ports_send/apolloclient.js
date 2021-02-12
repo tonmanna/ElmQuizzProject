@@ -8,7 +8,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import gql from 'graphql-tag'
 
 // Replace it with your graphql url
-const GRAPHQL_URI = 'localhost:4000/graphql';
+const GRAPHQL_URI = 'https://elmquiz.herokuapp.com/graphql';
 
 const getClient = (token) => {
     // Create an http link:
