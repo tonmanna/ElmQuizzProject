@@ -43,22 +43,28 @@ const getQuiz = () =>
             },
             {
                 no: 3,
-                title: "ผลลัพธ์ของ 10 5 คืออะไร ?",
+                title: "ผลลัพธ์ของ 10%5 คืออะไร ?",
                 answer: "",
                 mermaid: ``,
                 code: `
-                    var result:  10 5;
+                    var result =  10%5;
                `,
                 markdown: `
                `
             },
             {
                 no: 4,
-                title: "ค่าของ x คืออะไร ?",
+                title: "ค่าของ z คืออะไร ?",
                 answer: "",
                 mermaid: ``,
                 code: `
-                    let x: 1 + "2";
+
+                let p = +"30"+12;
+                console.log(p)
+                    let x = 1 + "2";
+                    let y = +"30"+0;
+                    let z = x + y;
+                    console.log(z);
                `,
                 markdown: `
               `
@@ -69,14 +75,14 @@ const getQuiz = () =>
                 answer: "",
                 mermaid: ``,
                 code: `
-                    let result: 'Hello World';
+                    let result = 'Hello World';
                `,
                 markdown: `
                `
             },
             {
                 no: 6,
-                title: "คำสั่งที่ใช้สำหรับการขึ้นบรรทัดใหม่ในสตริง?",
+                title: "คำสั่งที่ใช้สำหรับการขึ้นบรรทัดใหม่ในสตริง?[TS,JS]",
                 answer: "",
                 mermaid: ``,
                 code: `
@@ -155,7 +161,7 @@ const getQuiz = () =>
                 answer: "",
                 mermaid: ``,
                 code: `
-                    let x,y: 36;
+                    let x,[y,z] = [36,1];
                `,
                 markdown: `
                `
@@ -185,7 +191,7 @@ const getQuiz = () =>
                     run()
                 }`,
                 code: ``,
-                markdown: `#### Code เป็นภาษาอะไรก็ได้ในสามตัวเลือก TS, Java , C#`
+                markdown: `##### Code เป็นภาษาอะไรก็ได้ในสามตัวเลือก TS, Java , C#`
             }
         ])
     })
