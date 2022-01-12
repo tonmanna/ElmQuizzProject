@@ -27,7 +27,7 @@
   "license": "ISC",
   "dependencies": {
     "elm": "0.19.1-5",
-    "markdown-it": "^12.0.0",
+    "markdown-it": "^12.3.2",
     "prismjs": "^1.23.0"
   }
 }
