@@ -35,11 +35,11 @@ initQuestion : Question
 initQuestion =
     { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = Just "" }
 
-
+-- https://elmquiz.herokuapp.com/getQuiz
 initialCmd : Cmd Msg
 initialCmd =
     Http.get
-        { url = "https://elmquiz.herokuapp.com/getQuiz"
+        { url = "http://localhost:9999"
         , expect = Http.expectJson GetQuestions (list questionDecoder)
         }
 

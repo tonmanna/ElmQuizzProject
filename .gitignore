@@ -4,3 +4,7 @@ dist
 .cache
 _build
 priv
+deps
+priv
+_build
+target
