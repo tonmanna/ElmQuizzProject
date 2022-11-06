@@ -8,3 +8,5 @@ deps
 priv
 _build
 target
+# Local Netlify folder
+.netlify

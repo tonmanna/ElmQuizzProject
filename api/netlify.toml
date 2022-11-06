@@ -1,5 +1,5 @@
 [build]
   functions = "functions"
-
+  base = "./src"
 [dev]
   publish = "dist"
