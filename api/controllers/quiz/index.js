@@ -10,6 +10,11 @@ const getQuizExpressHandler = async (req, res) => {
     return await getQuiz();
 }
 
+const submitQuizExpressHandler = async (req, res) => {
+    console.log('req.body: ', req.body);
+    return await getQuiz();
+}
+
 const resolver = {
     Query: {
         getQuiz: graphQLHandler({
@@ -20,10 +25,14 @@ const resolver = {
 };
 
 const express = {
-    getQuizExpressHandler: expressHandler({
+    getQuizExpress: expressHandler({
         handler: getQuizExpressHandler,
         validator: (data) => data
 
+    }),
+    submitQuizExpress: expressHandler({
+        handler: submitQuizExpressHandler,
+        validator: (data) => data
     })
 }
 

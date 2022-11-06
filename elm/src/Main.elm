@@ -6,9 +6,11 @@ import Html.Attributes exposing ( class, for, hidden, href, id, placeholder, row
 import Html.Events exposing (onClick, onInput)
 import Http exposing (..)
 import Json.Decode exposing (Decoder, int, list, nullable, string, succeed)
+import Json.Encode as Encode
 import Json.Decode.Pipeline exposing ( required)
 import List exposing (..)
 import Html exposing (textarea)
+
 
 
 type alias QuestionListModel =
@@ -16,11 +18,12 @@ type alias QuestionListModel =
 
 
 type alias Question =
-    { no : Int, title : String, answer : String, mermaid : String, code : String, markdown : Maybe String }
+    { no : Int, title : String, answer : String, mermaid : String, code : String, markdown : String }
 
 
 type Msg
     = LetPlay
+    | ChangeCandidateId String
     | ClickNext Question
     | ClickBack Question
     | ClickSubmit
@@ -33,22 +36,33 @@ type Msg
 
 initQuestion : Question
 initQuestion =
-    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = Just "" }
+    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "" }
 
 -- https://elmquiz.herokuapp.com/getQuiz
 initialCmd : Cmd Msg
 initialCmd =
     Http.get
-        { url = "http://localhost:9999"
+        { url = "http://localhost:4000/getQuiz"
         , expect = Http.expectJson GetQuestions (list questionDecoder)
         }
 
+newPostEncoder : QuestionListModel -> Encode.Value
+newPostEncoder model =
+    Encode.object
+        [ ( "cadidateID", Encode.string model.candidateID )
+        , ( "questionNumber", Encode.int model.questionNumber )
+        , ( "answer", Encode.list Encode.string (List.map .answer model.questions) )
+        , ( "code", Encode.list Encode.string (List.map .code model.questions) )
+        , ( "mermaid", Encode.list Encode.string (List.map .mermaid model.questions) )        
+        , ( "markdown", Encode.list (Encode.string) (List.map .markdown model.questions) )
+        , ( "title", Encode.list (Encode.string) (List.map .title model.questions) )
+        ]
 
-submitCmd : Cmd Msg
-submitCmd =
+submitCmd :  QuestionListModel -> (Cmd Msg)
+submitCmd model =
     Http.post
-        { url = "https://elmquiz.herokuapp.com/submitAnswer"
-        , body = Http.emptyBody
+        { url = "http://localhost:4000/submitAnswer"
+        , body = Http.jsonBody  <| (newPostEncoder model)
         , expect = Http.expectJson SubmitAnswer string
         }
 
@@ -61,7 +75,7 @@ questionDecoder =
         |> required "answer" string
         |> required "mermaid" string
         |> required "code" string
-        |> required "markdown" (nullable string)
+        |> required "markdown" string
 
 
 errorToString : Http.Error -> String
@@ -100,12 +114,12 @@ initialModel =
 
 
 init : String -> ( QuestionListModel, Cmd Msg )
-init flags =
+init _ =
     ( initialModel, Cmd.batch [ code_heighlight initialModel, initialCmd ] )
 
 
 subscriptions : QuestionListModel -> Sub Msg
-subscriptions model =
+subscriptions _ =
     from_js GetFromJS
 
 
@@ -132,7 +146,7 @@ viewStartBadge model =
         , p []
             [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
         , p []
-            [ label [ class "badge badge-secondary" ] [ text "Candidate ID : ", input [ style "padding-left" "5px", type_ "text", value model.candidateID, placeholder "Enter your ID here." ] [] ] ]
+            [ label [ class "badge badge-secondary" ] [ text "Candidate Name : ", input [ style "padding-left" "5px", type_ "text", value model.candidateID, placeholder "Enter your ID here.",onInput ChangeCandidateId ] [] ] ]
         , p []
             [ span [ class "btn btn-primary btn-lg", onClick LetPlay ]
                 [ text "Let's Play »" ]
@@ -141,7 +155,7 @@ viewStartBadge model =
 
 
 viewFinishBadge : Question -> Bool -> String -> Html Msg
-viewFinishBadge question showFinishBadge errorMessage =
+viewFinishBadge question showFinishBadge errorMessage  =
     div [ class "container", hidden (not showFinishBadge) ]
         [ h1 [ class "display-12" ] [ text question.title ]
         , h3 [] [ text errorMessage ]
@@ -238,14 +252,16 @@ view model =
 update : Msg -> QuestionListModel -> ( QuestionListModel, Cmd Msg )
 update message model =
     case message of
-        ClickNext currentQuestion ->
+        ChangeCandidateId candidateID ->
+            ( { model | candidateID = candidateID }, Cmd.none )
+        ClickNext _ ->
             let
                 currentModel =
                     { model | questionNumber = model.questionNumber + 1 }
             in
             ( currentModel, code_heighlight currentModel )
 
-        ClickBack currentQuestion ->
+        ClickBack _ ->
             let
                 currentModel =
                     { model | questionNumber = model.questionNumber - 1 }
@@ -283,11 +299,11 @@ update message model =
             ( model, code_heighlight model )
 
         ClickSubmit ->
-            ( model, Cmd.batch [ submit_answer model, submitCmd ] )
+            ( model, Cmd.batch [ submit_answer model, submitCmd model ] )
 
         GetQuestions (Ok questions) ->
             case questions of
-                first :: rest ->
+                _ :: _ ->
                     ( { model | questions = questions }, Cmd.none )
 
                 [] ->
@@ -296,10 +312,10 @@ update message model =
         GetQuestions (Err httpError) ->
             ( { model | errorMessage = errorToString httpError }, Cmd.none )
 
-        SubmitAnswer (Ok questions) ->
+        SubmitAnswer (Ok _) ->
             ( model, Cmd.none )
 
-        SubmitAnswer (Err httpError) ->
+        SubmitAnswer (Err _) ->
             ( model, Cmd.none )
 
 
