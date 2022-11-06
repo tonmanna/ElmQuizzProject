@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "monorepo",
+  "workspaces": [
+    "elm/*",
+    "api/*"
+  ]
+}
