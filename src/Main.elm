@@ -42,7 +42,7 @@ initQuestion =
 initialCmd : Cmd Msg
 initialCmd =
     Http.get
-        { url = "http://localhost:4000/getQuiz"
+        { url = "https://exam.itopplus.com/getQuiz"
         , expect = Http.expectJson GetQuestions (list questionDecoder)
         }
 
@@ -62,7 +62,7 @@ newPostEncoder model =
 submitCmd :  QuestionListModel -> (Cmd Msg)
 submitCmd model =
     Http.post
-        { url = "http://localhost:4000/submitAnswer"
+        { url = "https://exam.itopplus.com/submitAnswer"
         , body = Http.jsonBody  <| (newPostEncoder model)
         , expect = Http.expectJson SubmitAnswer string
         }
