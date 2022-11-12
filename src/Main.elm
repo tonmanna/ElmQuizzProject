@@ -1,24 +1,23 @@
 port module Main exposing (..)
 
 import Browser
-import Html exposing (Html, a, code, div, h1, h3, img, input, label, p, pre, span, text)
+import Html exposing (Html, a, code, div, h1, h3, h4, img, input, label, p, pre, span, text)
 import Html.Attributes exposing ( class, for, hidden, href, id, placeholder, rows, src, style, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Http exposing (..)
-import Json.Decode exposing (Decoder, int, list, nullable, string, succeed)
+import Json.Decode exposing (Decoder, int, list, string, succeed, bool)
 import Json.Encode as Encode
 import Json.Decode.Pipeline exposing ( required)
 import List exposing (..)
 import Html exposing (textarea)
 
 
-
 type alias QuestionListModel =
-    { questions : List Question, questionNumber : Int, hiddenQuestion : Bool, candidateID : String, errorMessage : String }
+    { questions : List Question, questionNumber : Int, hiddenQuestion : Bool, candidateID : String, errorMessage : String, complete: Bool }
 
 
 type alias Question =
-    { no : Int, title : String, answer : String, mermaid : String, code : String, markdown : String }
+    { no : Int, title : String, answer : String, mermaid : String, code : String, markdown : String, script: String, questionType: Bool }
 
 
 type Msg
@@ -28,6 +27,7 @@ type Msg
     | ClickBack Question
     | ClickSubmit
     | GetFromJS String
+    | SetFromMonaco String
     | InputAnswer String
     | SetToJS
     | SubmitAnswer (Result Http.Error String)
@@ -36,32 +36,33 @@ type Msg
 
 initQuestion : Question
 initQuestion =
-    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "" }
+    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "", script = "" , questionType = False }
 
 -- https://elmquiz.herokuapp.com/getQuiz
 initialCmd : Cmd Msg
 initialCmd =
     Http.get
-        { url = "https://exam.itopplus.com/getQuiz"
+        { url = "http://localhost:4000/getQuiz"
         , expect = Http.expectJson GetQuestions (list questionDecoder)
         }
 
 newPostEncoder : QuestionListModel -> Encode.Value
 newPostEncoder model =
     Encode.object
-        [ ( "cadidateID", Encode.string model.candidateID )
+        [ ( "candidateID", Encode.string model.candidateID )
         , ( "questionNumber", Encode.int model.questionNumber )
         , ( "answer", Encode.list Encode.string (List.map .answer model.questions) )
         , ( "code", Encode.list Encode.string (List.map .code model.questions) )
         , ( "mermaid", Encode.list Encode.string (List.map .mermaid model.questions) )        
         , ( "markdown", Encode.list (Encode.string) (List.map .markdown model.questions) )
         , ( "title", Encode.list (Encode.string) (List.map .title model.questions) )
+        , ( "script", Encode.list (Encode.string) (List.map .script model.questions) )
         ]
 
 submitCmd :  QuestionListModel -> (Cmd Msg)
 submitCmd model =
     Http.post
-        { url = "https://exam.itopplus.com/submitAnswer"
+        { url = "http://localhost:4000/submitAnswer"
         , body = Http.jsonBody  <| (newPostEncoder model)
         , expect = Http.expectJson SubmitAnswer string
         }
@@ -76,6 +77,8 @@ questionDecoder =
         |> required "mermaid" string
         |> required "code" string
         |> required "markdown" string
+        |> required "script" string
+        |> required "questionType" bool
 
 
 errorToString : Http.Error -> String
@@ -102,7 +105,6 @@ errorToString error =
         BadBody errorMessage ->
             errorMessage
 
-
 initialModel : QuestionListModel
 initialModel =
     { questions = []
@@ -110,6 +112,7 @@ initialModel =
     , hiddenQuestion = True
     , candidateID = ""
     , errorMessage = ""
+    , complete = False
     }
 
 
@@ -120,11 +123,11 @@ init _ =
 
 subscriptions : QuestionListModel -> Sub Msg
 subscriptions _ =
-    from_js GetFromJS
+    Sub.batch [from_js GetFromJS, from_monaco SetFromMonaco]
 
 
 port from_js : (String -> message) -> Sub message
-
+port from_monaco : (String -> message) -> Sub message
 
 port code_heighlight : QuestionListModel -> Cmd message
 
@@ -134,6 +137,10 @@ port change_answer : QuestionListModel -> Cmd message
 
 port submit_answer : QuestionListModel -> Cmd message
 
+
+port init_monaco : QuestionListModel -> Cmd message
+
+port monaco_get_text : QuestionListModel -> Cmd message
 
 port getQuestionFromGraphQL : (Json.Decode.Value -> msg) -> Sub msg
 
@@ -154,20 +161,24 @@ viewStartBadge model =
         ]
 
 
-viewFinishBadge : Question -> Bool -> String -> Html Msg
-viewFinishBadge question showFinishBadge errorMessage  =
+viewFinishBadge : Question -> Bool -> Bool -> String -> Html Msg
+viewFinishBadge question showFinishBadge hideSubmitButton errorMessage  =
     div [ class "container", hidden (not showFinishBadge) ]
         [ h1 [ class "display-12" ] [ text question.title ]
         , h3 [] [ text errorMessage ]
         , p []
             [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
-        , p []
+        , p [ hidden (hideSubmitButton)]
             [ span [ class "btn btn-primary btn-lg", type_ "button", onClick ClickSubmit ]
                 [ text "Submit exam answer" ]
             , span [ class "btn btn-warning btn-lg", type_ "button", style "margin-left" "5px", onClick LetPlay ]
                 [ text " Back " ]
             ]
+        , p [ hidden (not hideSubmitButton)][
+            h4 [] [ text "Thank you for your participation." ]
+            ]
         ]
+        
 
 
 viewDownloadLink : Html Msg
@@ -205,11 +216,11 @@ viewQuestion question notShowQuestion =
             , div [ id ("mermaid" ++ String.fromInt question.no) ] []
             , div [ id ("markdown" ++ String.fromInt question.no) ] []
             , pre [] [ code [ id ("code" ++ String.fromInt question.no), class "language-javascript" ] [] ]
-            , textarea [ class "form-control", placeholder "Please enter answer here", rows 5, onInput InputAnswer, value question.answer ] []
+            , textarea [ hidden (question.questionType) , class "form-control", placeholder "Please explain solution here.", rows 5, onInput InputAnswer, value question.answer ] []
+            , p [ hidden (not question.questionType) ,style "padding-top" "20px"] [ Html.text "Script :", div [ id ("container" ++ String.fromInt question.no), style "height" "400px" ] []]
             ]
         , div [ class "container", hidden notShowQuestion ] [ viewNextBack question ]
         ]
-
 
 viewNextBack : Question -> Html Msg
 viewNextBack question =
@@ -238,6 +249,9 @@ view model =
 
         showFinishBadge =
             currentQuestion.title == "FINISH" && not (model.questionNumber == 0)
+        
+        hideSubmitButton =
+            model.complete == True
     in
     div []
         [ div [ class "container", hidden (not model.hiddenQuestion) ]
@@ -245,7 +259,7 @@ view model =
             , viewDownloadLink
             ]
         , div [ class "container", hidden notShowQuestion ] [ viewQuestion currentQuestion notShowQuestion ]
-        , viewFinishBadge currentQuestion showFinishBadge model.errorMessage
+        , viewFinishBadge currentQuestion showFinishBadge hideSubmitButton model.errorMessage
         ]
 
 
@@ -254,12 +268,13 @@ update message model =
     case message of
         ChangeCandidateId candidateID ->
             ( { model | candidateID = candidateID }, Cmd.none )
+        
         ClickNext _ ->
             let
                 currentModel =
                     { model | questionNumber = model.questionNumber + 1 }
             in
-            ( currentModel, code_heighlight currentModel )
+            ( currentModel,Cmd.batch [ monaco_get_text currentModel, code_heighlight currentModel, init_monaco currentModel]  )
 
         ClickBack _ ->
             let
@@ -268,7 +283,7 @@ update message model =
 
                 resultModel =
                     if model.questionNumber > 1 then
-                        ( currentModel, code_heighlight currentModel )
+                        ( currentModel, Cmd.batch [code_heighlight currentModel, init_monaco currentModel] )
 
                     else
                         ( { currentModel | hiddenQuestion = True }, Cmd.none )
@@ -281,7 +296,7 @@ update message model =
                     { model | questionNumber = 1, hiddenQuestion = False }
 
                 resultModel =
-                    ( currentModel, code_heighlight currentModel )
+                    ( currentModel, Cmd.batch [code_heighlight currentModel, init_monaco currentModel] )
             in
             resultModel
 
@@ -290,16 +305,22 @@ update message model =
                 currentModel =
                     updateAnswer answer model
             in
-            ( currentModel, change_answer currentModel )
+            ( currentModel, Cmd.batch [ change_answer currentModel, init_monaco currentModel] )
 
         GetFromJS value ->
             ( { model | candidateID = value }, Cmd.none )
+
+        SetFromMonaco value ->
+            let currentModel =
+                    updateScript value model
+            in
+            (currentModel, Cmd.none )
 
         SetToJS ->
             ( model, code_heighlight model )
 
         ClickSubmit ->
-            ( model, Cmd.batch [ submit_answer model, submitCmd model ] )
+            ( {model | complete = True }, Cmd.batch [ submit_answer model, submitCmd model ] )
 
         GetQuestions (Ok questions) ->
             case questions of
@@ -318,13 +339,24 @@ update message model =
         SubmitAnswer (Err _) ->
             ( model, Cmd.none )
 
-
 updateAnswer : String -> QuestionListModel -> QuestionListModel
 updateAnswer answer model =
     let
         toggle index question =
             if index == model.questionNumber - 1 then
                 { question | answer = answer }
+
+            else
+                question
+    in
+    { model | questions = List.indexedMap toggle model.questions }
+
+updateScript : String -> QuestionListModel -> QuestionListModel
+updateScript script model =
+    let
+        toggle index question =
+            if index == model.questionNumber - 1 then
+                { question | script = script }
 
             else
                 question

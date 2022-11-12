@@ -1,7 +1,7 @@
 import Prism from "prismjs";
 import MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
-export default model => {
+export default (model) => {
   var content = model.questions[model.questionNumber - 1];
   if (model.questionNumber != 0 && content != undefined) {
     setTimeout(function () {
@@ -27,9 +27,7 @@ function renderMarkDownIT(content, model) {
   var mdHtml = md.render(content.markdown);
   $(markdownID).empty();
   $(markdownID).append(mdHtml);
-  console.log('mdHtml: ', mdHtml);
 }
-
 function renderMermaid(content, model) {
   var svgID = "svgmermaid" + model.questionNumber;
   var mermaidID = "#mermaid" + model.questionNumber;
