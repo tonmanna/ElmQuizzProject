@@ -153,6 +153,8 @@ viewStartBadge model =
         , p []
             [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
         , p []
+            [ text "โจทย์ทั้งหมดมี 15 ข้อ" ]
+        , p []
             [ label [ class "badge badge-secondary" ] [ text "Candidate Name : ", input [ style "padding-left" "5px", type_ "text", value model.candidateID, placeholder "Enter your ID here.",onInput ChangeCandidateId ] [] ] ]
         , p []
             [ span [ class "btn btn-primary btn-lg", onClick LetPlay ]
