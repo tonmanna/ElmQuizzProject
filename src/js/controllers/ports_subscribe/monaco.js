@@ -3,14 +3,14 @@ import "monaco-editor/esm/vs/editor/standalone/browser/accessibilityHelp/accessi
 import * as monaco from "monaco-editor";
 
 export default (model, app) => {
+  if (window.currentEditor) {
+    app.ports.from_monaco.send("");
+    window.currentEditor.dispose();
+    window.currentEditor = null;
+  }
   setTimeout(() => {
     const content = document.getElementById("container" + model.questionNumber);
     if (content) {
-      if (window.currentEditor) {
-        var text = window.currentEditor.getValue();
-        window.currentEditor.dispose();
-        window.currentEditor = null;
-      }
       const script = model.questions[model.questionNumber - 1].script;
       window.currentEditor = monaco.editor.create(content, {
         value: script,
@@ -36,5 +36,5 @@ export default (model, app) => {
     } else {
       console.log("content is undefined");
     }
-  }, 100);
+  }, 1000);
 };
