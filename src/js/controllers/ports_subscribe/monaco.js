@@ -22,7 +22,6 @@ export default (model, app) => {
         wordWrap: "wordWrapColumn",
         wordWrapColumn: 80,
         wordWrapMinified: true,
-        theme: "lgtheme",
         wrappingIndent: "indent",
         minimap: {
           enabled: false,
@@ -36,5 +35,5 @@ export default (model, app) => {
     } else {
       console.log("content is undefined");
     }
-  }, 1000);
+  }, 150);
 };

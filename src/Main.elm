@@ -211,8 +211,11 @@ viewDownloadLink =
 
 viewQuestion : Question -> Bool -> Html Msg
 viewQuestion question notShowQuestion =
-    div []
-        [ div [ class "mb-3" ]
+    div []        
+        [  
+            div [ hidden notShowQuestion, style "position" "fixed", style "right" "0" , style "top" "0", style "margin-right" "20px" ] [ viewNextBack question ],
+            div [ class "mb-3" ]
+        
             [ label [ for "address" ]
                 [ text (String.fromInt question.no ++ ". " ++ question.title) ]
             , div [ id ("mermaid" ++ String.fromInt question.no) ] []
@@ -221,7 +224,7 @@ viewQuestion question notShowQuestion =
             , textarea [ hidden (question.questionType) , class "form-control", placeholder "Please explain solution here.", rows 5, onInput InputAnswer, value question.answer ] []
             , p [ hidden (not question.questionType) ,style "padding-top" "20px"] [ Html.text "Script :", div [ id ("container" ++ String.fromInt question.no), style "height" "400px" ] []]
             ]
-        , div [ class "container", hidden notShowQuestion ] [ viewNextBack question ]
+            , div [ class "container", hidden notShowQuestion ] [ viewNextBack question ]
         ]
 
 viewNextBack : Question -> Html Msg
