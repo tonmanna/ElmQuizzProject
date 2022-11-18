@@ -10,10 +10,9 @@ import Json.Encode as Encode
 import Json.Decode.Pipeline exposing ( required)
 import List exposing (..)
 import Html exposing (textarea)
-
-
+import String exposing (..)
 type alias QuestionListModel =
-    { questions : List Question, questionNumber : Int, hiddenQuestion : Bool, candidateID : String, errorMessage : String, complete: Bool }
+    { questions : List Question, questionNumber : Int, hiddenQuestion : Bool, candidateID : String, errorMessage : String, complete: Bool, startDate: String }
 
 
 type alias Question =
@@ -28,6 +27,7 @@ type Msg
     | ClickSubmit
     | GetFromJS String
     | SetFromMonaco String
+    | SetDateFromJS String
     | InputAnswer String
     | SetToJS
     | SubmitAnswer (Result Http.Error String)
@@ -36,7 +36,7 @@ type Msg
 
 initQuestion : Question
 initQuestion =
-    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "", script = "" , questionType = False }
+    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "", script = "" , questionType = False}
 
 -- https://elmquiz.herokuapp.com/getQuiz
 initialCmd : Cmd Msg
@@ -57,6 +57,7 @@ newPostEncoder model =
         , ( "markdown", Encode.list (Encode.string) (List.map .markdown model.questions) )
         , ( "title", Encode.list (Encode.string) (List.map .title model.questions) )
         , ( "script", Encode.list (Encode.string) (List.map .script model.questions) )
+        , ( "startDate", Encode.string model.startDate )
         ]
 
 submitCmd :  QuestionListModel -> (Cmd Msg)
@@ -113,6 +114,7 @@ initialModel =
     , candidateID = ""
     , errorMessage = ""
     , complete = False
+    , startDate = ""
     }
 
 
@@ -123,14 +125,14 @@ init _ =
 
 subscriptions : QuestionListModel -> Sub Msg
 subscriptions _ =
-    Sub.batch [from_js GetFromJS, from_monaco SetFromMonaco]
+    Sub.batch [from_js GetFromJS, from_monaco SetFromMonaco, from_date SetDateFromJS]
 
 
 port from_js : (String -> message) -> Sub message
 port from_monaco : (String -> message) -> Sub message
+port from_date : (String -> message) -> Sub message
 
 port code_heighlight : QuestionListModel -> Cmd message
-
 
 port change_answer : QuestionListModel -> Cmd message
 
@@ -153,7 +155,7 @@ viewStartBadge model =
         , p []
             [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
         , p []
-            [ text "โจทย์ทั้งหมดมี 15 ข้อ" ]
+            [ text <| String.concat["โจทย์ทั้งหมดมี : ",String.fromInt <| List.length model.questions," ข้อ เวลาไม่จำกัด" ]]
         , p []
             [ label [ class "badge badge-secondary" ] [ text "Candidate Name : ", input [ style "padding-left" "5px", type_ "text", value model.candidateID, placeholder "Enter your ID here.",onInput ChangeCandidateId ] [] ] ]
         , p []
@@ -219,8 +221,8 @@ viewQuestion question notShowQuestion =
             [ label [ for "address" ]
                 [ text (String.fromInt question.no ++ ". " ++ question.title) ]
             , div [ id ("mermaid" ++ String.fromInt question.no) ] []
-            , div [ id ("markdown" ++ String.fromInt question.no) ] []
             , pre [] [ code [ id ("code" ++ String.fromInt question.no), class "language-javascript" ] [] ]
+            , div [ id ("markdown" ++ String.fromInt question.no) ] []
             , textarea [ hidden (question.questionType) , class "form-control", placeholder "Please explain solution here.", rows 5, onInput InputAnswer, value question.answer ] []
             , p [ hidden (not question.questionType) ,style "padding-top" "20px"] [ Html.text "Script :", div [ id ("container" ++ String.fromInt question.no), style "height" "400px" ] []]
             ]
@@ -304,7 +306,8 @@ update message model =
                     ( currentModel, Cmd.batch [code_heighlight currentModel, init_monaco currentModel] )
             in
             resultModel
-
+        SetDateFromJS date ->
+            ( { model | startDate = date }, Cmd.none )
         InputAnswer answer ->
             let
                 currentModel =
