@@ -1,4 +1,4 @@
-import Prism from "prismjs";
+import * as Prism from "prismjs";
 import MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
 export default (model) => {
