@@ -204,9 +204,7 @@ viewDownloadLink =
             ]
         , p [ class "text-bold-load" ]
             [ text "Exam question (Full Stack Developer):"
-            , div []
-                [ img [ src "/assets/exam/Puneet.svg", style "width" "100%" ] []
-                ]
+            , div [] []
             ]
         ]
 
