@@ -1,39 +1,44 @@
 import "monaco-editor/esm/vs/editor/editor.all.js";
 import "monaco-editor/esm/vs/editor/standalone/browser/accessibilityHelp/accessibilityHelp.js";
 import * as monaco from "monaco-editor";
-
+function waitUntilEditorDefine(model, app) {
+  console.log("model: ", model);
+  const element = "container" + model.questionNumber;
+  const editor = document.getElementById(element);
+  if (!editor) {
+    setTimeout(() => {
+      waitUntilEditorDefine(model, app);
+    }, 100);
+  } else {
+    const script = model.questions[model.questionNumber - 1].script;
+    window.currentEditor = monaco.editor.create(editor, {
+      value: script,
+      language: "javascript",
+      lineNumbers: "on",
+      roundedSelection: false,
+      scrollBeyondLastLine: false,
+      readOnly: false,
+      wordWrap: "wordWrapColumn",
+      wordWrapColumn: 80,
+      wordWrapMinified: true,
+      wrappingIndent: "indent",
+      theme: "vs-dark",
+      minimap: {
+        enabled: false,
+      },
+    });
+    window.currentEditor.getModel().onDidChangeContent((event) => {
+      var text = window.currentEditor.getValue();
+      app.ports.from_monaco.send(text);
+    });
+  }
+}
 export default (model, app) => {
   if (window.currentEditor) {
     app.ports.from_monaco.send("");
     window.currentEditor.dispose();
     window.currentEditor = null;
   }
-  setTimeout(() => {
-    const content = document.getElementById("container" + model.questionNumber);
-    if (content) {
-      const script = model.questions[model.questionNumber - 1].script;
-      window.currentEditor = monaco.editor.create(content, {
-        value: script,
-        language: "javascript",
-        lineNumbers: "on",
-        roundedSelection: false,
-        scrollBeyondLastLine: false,
-        readOnly: false,
-        wordWrap: "wordWrapColumn",
-        wordWrapColumn: 80,
-        wordWrapMinified: true,
-        wrappingIndent: "indent",
-        minimap: {
-          enabled: false,
-        },
-      });
 
-      window.currentEditor.getModel().onDidChangeContent((event) => {
-        var text = window.currentEditor.getValue();
-        app.ports.from_monaco.send(text);
-      });
-    } else {
-      console.log("content is undefined");
-    }
-  }, 150);
+  waitUntilEditorDefine(model, app);
 };
