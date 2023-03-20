@@ -8,7 +8,8 @@ function waitUntilEditorDefine(model, app) {
   const script = model.questions[model.questionNumber - 1].script;
   window.currentEditor = monaco.editor.create(editor, {
     value: script,
-    language: "javascript",
+    language:
+      model.questions[model.questionNumber - 1].language || "javascript",
     lineNumbers: "on",
     roundedSelection: false,
     scrollBeyondLastLine: false,

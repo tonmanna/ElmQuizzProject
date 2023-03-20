@@ -16,7 +16,7 @@ type alias QuestionListModel =
 
 
 type alias Question =
-    { no : Int, title : String, answer : String, mermaid : String, code : String, markdown : String, script: String, questionType: Bool }
+    { no : Int, title : String, answer : String, language : String, mermaid : String, code : String, markdown : String, script: String, questionType: Bool }
 
 
 type Msg
@@ -36,13 +36,13 @@ type Msg
 
 initQuestion : Question
 initQuestion =
-    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", markdown = "", script = "" , questionType = False}
+    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", language = "javascript", markdown = "", script = "" , questionType = False}
 
 -- https://elmquiz.herokuapp.com/getQuiz
 initialCmd : Cmd Msg
 initialCmd =
     Http.get
-        { url = "https://exam.itopplus.com/getQuiz"
+        { url = "http://localhost:4000/getQuiz"
         , expect = Http.expectJson GetQuestions (list questionDecoder)
         }
 
@@ -53,6 +53,7 @@ newPostEncoder model =
         , ( "questionNumber", Encode.int model.questionNumber )
         , ( "answer", Encode.list Encode.string (List.map .answer model.questions) )
         , ( "code", Encode.list Encode.string (List.map .code model.questions) )
+        , ( "language", Encode.list Encode.string (List.map .language model.questions) )
         , ( "mermaid", Encode.list Encode.string (List.map .mermaid model.questions) )        
         , ( "markdown", Encode.list (Encode.string) (List.map .markdown model.questions) )
         , ( "title", Encode.list (Encode.string) (List.map .title model.questions) )
@@ -75,6 +76,7 @@ questionDecoder =
         |> required "no" int
         |> required "title" string
         |> required "answer" string
+        |> required "language" string
         |> required "mermaid" string
         |> required "code" string
         |> required "markdown" string
