@@ -42,7 +42,7 @@ initQuestion =
 initialCmd : Cmd Msg
 initialCmd =
     Http.get
-        { url = "http://localhost:4000/getQuiz"
+        { url = "https://exam.itopplus.com/getQuiz"
         , expect = Http.expectJson GetQuestions (list questionDecoder)
         }
 
