@@ -5,33 +5,29 @@ function waitUntilEditorDefine(model, app) {
   console.log("model: ", model);
   const element = "container" + model.questionNumber;
   const editor = document.getElementById(element);
-  if (!editor) {
+  const script = model.questions[model.questionNumber - 1].script;
+  window.currentEditor = monaco.editor.create(editor, {
+    value: script,
+    language: "javascript",
+    lineNumbers: "on",
+    roundedSelection: false,
+    scrollBeyondLastLine: false,
+    readOnly: false,
+    wordWrap: "wordWrapColumn",
+    wordWrapColumn: 80,
+    wordWrapMinified: true,
+    wrappingIndent: "indent",
+    theme: "vs-dark",
+    minimap: {
+      enabled: false,
+    },
+  });
+  window.currentEditor.getModel().onDidChangeContent((event) => {
+    var text = window.currentEditor.getValue();
     setTimeout(() => {
-      waitUntilEditorDefine(model, app);
-    }, 100);
-  } else {
-    const script = model.questions[model.questionNumber - 1].script;
-    window.currentEditor = monaco.editor.create(editor, {
-      value: script,
-      language: "javascript",
-      lineNumbers: "on",
-      roundedSelection: false,
-      scrollBeyondLastLine: false,
-      readOnly: false,
-      wordWrap: "wordWrapColumn",
-      wordWrapColumn: 80,
-      wordWrapMinified: true,
-      wrappingIndent: "indent",
-      theme: "vs-dark",
-      minimap: {
-        enabled: false,
-      },
-    });
-    window.currentEditor.getModel().onDidChangeContent((event) => {
-      var text = window.currentEditor.getValue();
       app.ports.from_monaco.send(text);
-    });
-  }
+    }, 1000);
+  });
 }
 export default (model, app) => {
   if (window.currentEditor) {
@@ -39,6 +35,7 @@ export default (model, app) => {
     window.currentEditor.dispose();
     window.currentEditor = null;
   }
-
-  waitUntilEditorDefine(model, app);
+  setTimeout(() => {
+    waitUntilEditorDefine(model, app);
+  }, 500);
 };

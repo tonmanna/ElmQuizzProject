@@ -5,9 +5,7 @@ function waitUntilEditorDefine(model, app) {
   const element = "container" + model.questionNumber;
   const editor = document.getElementById(element);
   if (!editor || !window.currentEditor) {
-    setTimeout(() => {
-      waitUntilEditorDefine(model, app);
-    }, 100);
+    waitUntilEditorDefine(model, app);
   } else {
     var text = window.currentEditor.getValue();
     app.ports.from_monaco.send(text);
@@ -15,5 +13,7 @@ function waitUntilEditorDefine(model, app) {
 }
 
 export default (model, app) => {
-  waitUntilEditorDefine(model, app);
+  setTimeout(() => {
+    waitUntilEditorDefine(model, app);
+  }, 500);
 };

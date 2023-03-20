@@ -1,7 +1,6 @@
 export default (model) => {
   function showDialog() {
     // Get the snackbar DIV
-    console.log("model: ", model);
     var x = document.getElementById("snackbar");
     x.innerHTML =
       "<div>Thanks : <b>" +
