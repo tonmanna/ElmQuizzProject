@@ -127,8 +127,7 @@ init _ =
 
 subscriptions : QuestionListModel -> Sub Msg
 subscriptions _ =
-    Sub.batch [from_js GetFromJS, from_monaco SetFromMonaco, from_date SetDateFromJS]
-
+    Sub.batch [ from_monaco SetFromMonaco, from_js GetFromJS, from_date SetDateFromJS]
 
 port from_js : (String -> message) -> Sub message
 port from_monaco : (String -> message) -> Sub message
