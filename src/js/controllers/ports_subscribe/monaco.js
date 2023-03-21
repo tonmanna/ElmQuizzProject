@@ -35,9 +35,11 @@ function waitUntilEditorDefine(model, app) {
 }
 export default (model, app) => {
   if (window.currentEditor) {
-    app.ports.from_monaco.send("");
     window.currentEditor.dispose();
     window.currentEditor = null;
+    setTimeout(() => {
+      app.ports.from_monaco.send("");
+    });
   }
   setTimeout(() => {
     waitUntilEditorDefine(model, app);
