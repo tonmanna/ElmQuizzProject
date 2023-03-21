@@ -178,7 +178,7 @@ viewFinishBadge question showFinishBadge hideSubmitButton errorMessage  =
             [ span [ class "btn btn-primary btn-lg", type_ "button", onClick ClickSubmit ]
                 [ text "Submit exam answer" ]
             , span [ class "btn btn-warning btn-lg", type_ "button", style "margin-left" "5px", onClick LetPlay ]
-                [ text " Back " ]
+                [ text " Re-check " ]
             ]
         , p [ hidden (not hideSubmitButton)][
             h4 [] [ text "Thank you for your participation." ]
@@ -223,10 +223,12 @@ viewQuestion question notShowQuestion =
             , div [ id ("mermaid" ++ String.fromInt question.no) ] []
             , pre [] [ code [ id ("code" ++ String.fromInt question.no), class "language-javascript" ] [] ]
             , div [ id ("markdown" ++ String.fromInt question.no) ] []
+            , div [ class "container", hidden notShowQuestion ] [ viewNextBack question ]
+            , div [ style "height" "30px"] []
             , textarea [ hidden (question.questionType) , class "form-control", placeholder "Please explain solution here.", rows 5, onInput InputAnswer, value question.answer ] []
             , p [ hidden (not question.questionType) ,style "padding-top" "20px"] [ Html.text "Script :", div [ id ("container" ++ String.fromInt question.no), style "height" "400px" ] []]
             ]
-            , div [ class "container", hidden notShowQuestion ] [ viewNextBack question ]
+            
         ]
 
 viewNextBack : Question -> Html Msg

@@ -2,7 +2,6 @@ import "monaco-editor/esm/vs/editor/editor.all.js";
 import "monaco-editor/esm/vs/editor/standalone/browser/accessibilityHelp/accessibilityHelp.js";
 import * as monaco from "monaco-editor";
 function waitUntilEditorDefine(model, app) {
-  console.log("model: ", model);
   const element = "container" + model.questionNumber;
   const editor = document.getElementById(element);
   const script = model.questions[model.questionNumber - 1].script;
@@ -38,5 +37,5 @@ export default (model, app) => {
   }
   setTimeout(() => {
     waitUntilEditorDefine(model, app);
-  }, 500);
+  }, 1000);
 };

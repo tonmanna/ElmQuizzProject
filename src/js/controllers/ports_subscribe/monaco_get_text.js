@@ -15,5 +15,5 @@ function waitUntilEditorDefine(model, app) {
 export default (model, app) => {
   setTimeout(() => {
     waitUntilEditorDefine(model, app);
-  }, 500);
+  }, 1000);
 };
