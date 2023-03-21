@@ -4,7 +4,7 @@ import * as monaco from "monaco-editor";
 function waitUntilEditorDefine(model, app) {
   const element = "container" + model.questionNumber;
   const editor = document.getElementById(element);
-  if (!editor) {
+  if (!editor || window.currentEditor != undefined) {
     setTimeout(() => {
       waitUntilEditorDefine(model, app);
     }, 100);
@@ -29,7 +29,9 @@ function waitUntilEditorDefine(model, app) {
     });
     window.currentEditor.getModel().onDidChangeContent((event) => {
       var text = window.currentEditor.getValue();
-      app.ports.from_monaco.send(text);
+      if (text != "") {
+        app.ports.from_monaco.send(text);
+      }
     });
   }
 }
@@ -37,11 +39,6 @@ export default (model, app) => {
   if (window.currentEditor) {
     window.currentEditor.dispose();
     window.currentEditor = null;
-    setTimeout(() => {
-      app.ports.from_monaco.send("");
-    });
   }
-  setTimeout(() => {
-    waitUntilEditorDefine(model, app);
-  }, 100);
+  waitUntilEditorDefine(model, app);
 };
