@@ -24,9 +24,7 @@ function waitUntilEditorDefine(model, app) {
   });
   window.currentEditor.getModel().onDidChangeContent((event) => {
     var text = window.currentEditor.getValue();
-    setTimeout(() => {
-      app.ports.from_monaco.send(text);
-    }, 1000);
+    app.ports.from_monaco.send(text);
   });
 }
 export default (model, app) => {
