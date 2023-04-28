@@ -11,6 +11,7 @@ import Json.Decode.Pipeline exposing ( required)
 import List exposing (..)
 import Html exposing (textarea)
 import String exposing (..)
+
 type alias QuestionListModel =
     { questions : List Question, questionNumber : Int, hiddenQuestion : Bool, candidateID : String, errorMessage : String, complete: Bool, startDate: String }
 
@@ -21,6 +22,7 @@ type alias Question =
 
 type Msg
     = LetPlay
+    | LetPlayTester
     | ChangeCandidateId String
     | ClickNext Question
     | ClickBack Question
@@ -32,19 +34,12 @@ type Msg
     | SetToJS
     | SubmitAnswer (Result Http.Error String)
     | GetQuestions (Result Http.Error (List Question))
+    | GetQuestionsTester (Result Http.Error (List Question))
 
 
 initQuestion : Question
 initQuestion =
     { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", language = "javascript", markdown = "", script = "" , questionType = False}
-
--- https://elmquiz.herokuapp.com/getQuiz
-initialCmd : Cmd Msg
-initialCmd =
-    Http.get
-        { url = "https://exam.itopplus.com/getQuiz"
-        , expect = Http.expectJson GetQuestions (list questionDecoder)
-        }
 
 newPostEncoder : QuestionListModel -> Encode.Value
 newPostEncoder model =
@@ -69,6 +64,19 @@ submitCmd model =
         , expect = Http.expectJson SubmitAnswer string
         }
 
+fetchQuestionTesterCmd : Cmd Msg
+fetchQuestionTesterCmd = 
+    Http.get
+        { url = "https://exam.itopplus.com/getQuizTester"
+        , expect = Http.expectJson GetQuestionsTester (list questionDecoder)
+        }
+-- https://elmquiz.herokuapp.com/getQuiz
+fetchQuestionCmd : Cmd Msg
+fetchQuestionCmd =
+    Http.get
+        { url = "https://exam.itopplus.com/getQuiz"
+        , expect = Http.expectJson GetQuestions (list questionDecoder)
+        }
 
 questionDecoder : Decoder Question
 questionDecoder =
@@ -122,7 +130,7 @@ initialModel =
 
 init : String -> ( QuestionListModel, Cmd Msg )
 init _ =
-    ( initialModel, Cmd.batch [ code_heighlight initialModel, initialCmd ] )
+    ( initialModel, Cmd.batch [] )
 
 
 subscriptions : QuestionListModel -> Sub Msg
@@ -161,8 +169,13 @@ viewStartBadge model =
             [ label [ class "badge badge-secondary" ] [ text "Candidate Name : ", input [ style "padding-left" "5px", type_ "text", value model.candidateID, placeholder "Enter your ID here.",onInput ChangeCandidateId ] [] ] ]
         , p []
             [ span [ class "btn btn-primary btn-lg", onClick LetPlay ]
-                [ text "Let's Play »" ]
+                [ text "Developer »" ]
             ]
+        , p []
+            [ span [ class "btn btn-primary btn-lg", onClick LetPlayTester ]
+                [ text "Tester »" ]
+            ]
+
         ]
 
 
@@ -301,12 +314,20 @@ update message model =
         LetPlay ->
             let
                 currentModel =
-                    { model | questionNumber = 1, hiddenQuestion = False }
+                    { model | hiddenQuestion = False }
 
                 resultModel =
-                    ( currentModel, Cmd.batch [code_heighlight currentModel, init_monaco currentModel] )
+                    ( currentModel, fetchQuestionCmd )
             in
             resultModel
+        LetPlayTester ->
+            let currentModel =
+                    { model | hiddenQuestion = False  }
+
+                resultModel =
+                    ( currentModel, fetchQuestionTesterCmd )
+            in
+            resultModel            
         SetDateFromJS date ->
             ( { model | startDate = date }, Cmd.none )
         InputAnswer answer ->
@@ -314,7 +335,7 @@ update message model =
                 currentModel =
                     updateAnswer answer model
             in
-            ( currentModel, Cmd.batch [ change_answer currentModel, init_monaco currentModel] )
+            ( currentModel, change_answer currentModel )
 
         GetFromJS value ->
             ( { model | candidateID = value }, Cmd.none )
@@ -334,7 +355,19 @@ update message model =
         GetQuestions (Ok questions) ->
             case questions of
                 _ :: _ ->
-                    ( { model | questions = questions }, Cmd.none )
+                 let currentModel = { model | questions = questions , questionNumber = 1 }
+                 in
+                 ( { model | questions = questions , questionNumber = 1 },  Cmd.batch [code_heighlight currentModel, init_monaco currentModel])
+
+                [] ->
+                    ( model, Cmd.none )
+
+        GetQuestionsTester (Ok questions) ->
+            case questions of
+                _ :: _ ->
+                 let currentModel = { model | questions = questions , questionNumber = 1 }
+                 in
+                 ( { model | questions = questions , questionNumber = 1 },  Cmd.batch [code_heighlight currentModel, init_monaco currentModel])
 
                 [] ->
                     ( model, Cmd.none )
@@ -347,6 +380,9 @@ update message model =
 
         SubmitAnswer (Err _) ->
             ( model, Cmd.none )
+
+        GetQuestionsTester (Err httpError) ->
+            ( { model | errorMessage = errorToString httpError }, Cmd.none )
 
 updateAnswer : String -> QuestionListModel -> QuestionListModel
 updateAnswer answer model =
