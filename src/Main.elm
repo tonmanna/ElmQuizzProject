@@ -2,7 +2,7 @@ port module Main exposing (..)
 
 import Browser
 import Html exposing (Html, a, code, div, h1, h3, h4, img, input, label, p, pre, span, text)
-import Html.Attributes exposing ( class, for, hidden, href, id, placeholder, rows, src, style, type_, value)
+import Html.Attributes exposing ( class, for, hidden, href, id, placeholder, rows, src, style, type_, value, disabled)
 import Html.Events exposing (onClick, onInput)
 import Http exposing (..)
 import Json.Decode exposing (Decoder, int, list, string, succeed, bool)
@@ -35,6 +35,7 @@ type Msg
     | SubmitAnswer (Result Http.Error String)
     | GetQuestions (Result Http.Error (List Question))
     | GetQuestionsTester (Result Http.Error (List Question))
+    | BackToBegining
 
 
 initQuestion : Question
@@ -164,8 +165,6 @@ viewStartBadge model =
         , p []
             [ text "“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”" ]
         , p []
-            [ text <| String.concat["โจทย์ทั้งหมดมี : ",String.fromInt <| List.length model.questions," ข้อ เวลาไม่จำกัด" ]]
-        , p []
             [ label [ class "badge badge-secondary" ] [ text "Candidate Name : ", input [ style "padding-left" "5px", type_ "text", value model.candidateID, placeholder "Enter your ID here.",onInput ChangeCandidateId ] [] ] ]
         , p []
             [ span [ class "btn btn-primary btn-lg", onClick LetPlay ]
@@ -189,7 +188,7 @@ viewFinishBadge question showFinishBadge hideSubmitButton errorMessage  =
         , p [ hidden (hideSubmitButton)]
             [ span [ class "btn btn-primary btn-lg", type_ "button", onClick ClickSubmit ]
                 [ text "Submit exam answer" ]
-            , span [ class "btn btn-warning btn-lg", type_ "button", style "margin-left" "5px", onClick LetPlay ]
+            , span [ class "btn btn-warning btn-lg", type_ "button", style "margin-left" "5px", onClick BackToBegining ]
                 [ text " Re-check " ]
             ]
         , p [ hidden (not hideSubmitButton)][
@@ -246,8 +245,12 @@ viewQuestion question notShowQuestion =
 viewNextBack : Question -> Html Msg
 viewNextBack question =
     div [ class "row" ]
-        [ input [ class "btn btn-warning", onClick (ClickBack question), style "margin-left" "5px", type_ "submit", value "Back" ] []
-        , input [ class "btn btn-info", onClick (ClickNext question), style "margin-left" "5px", type_ "submit", value "Next" ] []
+        [
+            if question.no == 1 then
+                input [ class "btn btn-default", style "margin-left" "5px", type_ "submit", value "Back", disabled (question.no == 1) ] []
+            else 
+                input [ class "btn btn-warning", onClick (ClickBack question), style "margin-left" "5px", type_ "submit", value "Back" ] []
+            , input [  class "btn btn-info", onClick (ClickNext question), style "margin-left" "5px", type_ "submit", value "Next" ] []
         ]
 
 
@@ -311,6 +314,8 @@ update message model =
             in
             resultModel
 
+        BackToBegining ->
+            ( { model | questionNumber = 1, hiddenQuestion = False }, Cmd.none )
         LetPlay ->
             let
                 currentModel =
