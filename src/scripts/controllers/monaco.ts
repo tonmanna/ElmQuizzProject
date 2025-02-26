@@ -1,12 +1,14 @@
 import "monaco-editor/esm/vs/editor/editor.all.js";
 import "monaco-editor/esm/vs/editor/standalone/browser/accessibilityHelp/accessibilityHelp.js";
 import * as monaco from "monaco-editor";
-function waitUntilEditorDefine(model, app) {
+import { MainModel } from "../../types";
+declare let window: any;
+function waitUntilEditorDefine(model: MainModel) {
   const element = "container" + model.questionNumber;
   const editor = document.getElementById(element);
   if (!editor || window.currentEditor != undefined) {
     setTimeout(() => {
-      waitUntilEditorDefine(model, app);
+      waitUntilEditorDefine(model);
     }, 100);
   } else {
     const script = model.questions[model.questionNumber - 1].script;
@@ -20,25 +22,24 @@ function waitUntilEditorDefine(model, app) {
       readOnly: false,
       wordWrap: "wordWrapColumn",
       wordWrapColumn: 80,
-      wordWrapMinified: true,
       wrappingIndent: "indent",
       theme: "vs-dark",
       minimap: {
         enabled: false,
       },
     });
-    window.currentEditor.getModel().onDidChangeContent((event) => {
+    window.currentEditor.getModel().onDidChangeContent(() => {
       var text = window.currentEditor.getValue();
-      if (text != "") {
-        app.ports.from_monaco.send(text);
-      }
+      // if (text != "") {
+      //   app.ports.from_monaco.send(text);
+      // }
     });
   }
 }
-export default (model, app) => {
+export default (model: MainModel) => {
   if (window.currentEditor) {
     window.currentEditor.dispose();
     window.currentEditor = null;
   }
-  waitUntilEditorDefine(model, app);
+  waitUntilEditorDefine(model);
 };

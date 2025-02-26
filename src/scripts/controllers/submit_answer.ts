@@ -1,7 +1,12 @@
-export default (model) => {
+import { MainModel } from "../../types";
+
+export default (model: MainModel) => {
   function showDialog() {
     // Get the snackbar DIV
     var x = document.getElementById("snackbar");
+    if (x == null) {
+      return;
+    }
     x.innerHTML =
       "<div>Thanks : <b>" +
       model.candidateID +
@@ -12,6 +17,9 @@ export default (model) => {
 
     // After 3 seconds, remove the show class from DIV
     setTimeout(function () {
+      if (x == null) {
+        return;
+      }
       x.className = x.className.replace("show", "");
     }, 3000);
   }

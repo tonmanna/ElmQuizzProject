@@ -1,20 +1,16 @@
 {
-    "editor.formatOnSave": true,
-    "eslint.autoFixOnSave": true,
-    "eslint.enable": true,
-    "files.exclude": {
-        "**/.git": true,
-        "**/node_modules": true,
-        "**/elm-stuff": true,
-        ".cache": true,
-        "package-lock.json": false,
-        "dist": true,
-        "**/deps": true,
-        "**/priv": false,
-        "**/_build": true
-
-    },
-    "[elm]": {
-        "editor.formatOnSave": true
-    },
+  "editor.formatOnSave": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.enable": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/elm-stuff": true,
+    ".cache": true,
+    "package-lock.json": false,
+    "dist": true,
+    "**/deps": true,
+    "**/priv": false,
+    "**/_build": true
+  }
 }

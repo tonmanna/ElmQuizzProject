@@ -1,7 +1,10 @@
 import * as Prism from "prismjs";
 import MarkdownIt from "markdown-it";
+import mermaid from "mermaid";
+import { MainModel, QuestionModel } from "../../types";
+import $ from "jquery";
 const md = new MarkdownIt();
-export default (model) => {
+export default (model: MainModel) => {
   var content = model.questions[model.questionNumber - 1];
   if (model.questionNumber != 0 && content != undefined) {
     setTimeout(function () {
@@ -12,7 +15,7 @@ export default (model) => {
   }
 };
 
-function renderPrism(content, model) {
+function renderPrism(content: QuestionModel, model: MainModel) {
   var codeID = "#code" + model.questionNumber;
   const html = Prism.highlight(
     content.code,
@@ -22,13 +25,13 @@ function renderPrism(content, model) {
   $(codeID).empty();
   $(codeID).append(html);
 }
-function renderMarkDownIT(content, model) {
+function renderMarkDownIT(content: QuestionModel, model: MainModel) {
   var markdownID = "#markdown" + model.questionNumber;
   var mdHtml = md.render(content.markdown);
   $(markdownID).empty();
   $(markdownID).append(mdHtml);
 }
-function renderMermaid(content, model) {
+async function renderMermaid(content: QuestionModel, model: MainModel) {
   var svgID = "svgmermaid" + model.questionNumber;
   var mermaidID = "#mermaid" + model.questionNumber;
   var prevMermaidID = "#mermaid" + (model.questionNumber - 1);
@@ -38,8 +41,7 @@ function renderMermaid(content, model) {
   $(prevMermaidID).empty();
   $(lastMermaidID).empty();
   if (content.mermaid.length > 5) {
-    mermaid.render(svgID, content.mermaid, function (element) {
-      $(mermaidID).append(element);
-    });
+    const mermaidRender = await mermaid.render(svgID, content.mermaid);
+    $(mermaidID).append(mermaidRender.svg);
   }
 }
