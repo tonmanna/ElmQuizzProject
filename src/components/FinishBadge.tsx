@@ -22,12 +22,17 @@ const FinishBadge: React.FC<Props> = ({
     <h1 className="display-12">{question.title}</h1>
     <h3>{errorMessage}</h3>
     <p>
-      “You can’t stop the future. You can’t rewind the past. The only way to
-      learn the secret is to press play.”
+      “Yesterday's lessons, tomorrow's unknown, The wisdom we seek has already
+      been shown. Not in rewind, not in fast-forward dreams, But in embracing
+      now, as strange as it seems.”
+    </p>
+    <p>
+      When you're ready, just submit the exam. On the other hand, if you need to
+      review your answers, just click Re-check.
     </p>
     <p hidden={hideSubmitButton}>
       <span className="btn btn-primary btn-lg" onClick={onSubmit}>
-        Submit exam answer
+        Submit »
       </span>
       <span
         className="btn btn-warning btn-lg"

@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { MainModel, QuestionModel } from "./types";
-import { fetchQuestions, fetchQuizResult, submitAnswers } from "./api";
+import { MainModel } from "./types";
+import { fetchQuestions, submitAnswers } from "./api";
 import StartBadge from "./components/StartBadge";
 import FinishBadge from "./components/FinishBadge";
 import Question from "./components/Question";
 import DownloadLink from "./components/DownloadLink";
-import { InitItem } from "./scripts/helpers/localstorage";
-import monacoInit from "./scripts/controllers/monaco";
+import {
+  disposeEditor,
+  waitUntilEditorDefine,
+} from "./scripts/controllers/monaco";
 import codeHeighLight from "./scripts/controllers/code_heighlight";
 import submitAnswersDialog from "./scripts/controllers/submit_answer";
+
+declare let window: any;
 const initialModel: MainModel = {
   questions: [],
   questionNumber: 0,
@@ -28,7 +32,6 @@ const App: React.FC = () => {
   }, []);
 
   const handleStart = async () => {
-    await InitItem();
     const questions = await fetchQuestions();
     const updateState = {
       ...model,
@@ -36,9 +39,7 @@ const App: React.FC = () => {
       hiddenQuestion: false,
       questionNumber: 1,
     };
-    await monacoInit(updateState);
-    await codeHeighLight(updateState);
-    setModel(updateState);
+    await updateModel(updateState);
   };
 
   const handleNext = async () => {
@@ -49,9 +50,7 @@ const App: React.FC = () => {
       questionNumber: model.questionNumber + 1,
       hideQuestion,
     };
-    await monacoInit(updateState);
-    await codeHeighLight(updateState);
-    setModel(updateState);
+    await updateModel(updateState);
   };
 
   const handleBack = async () => {
@@ -62,9 +61,7 @@ const App: React.FC = () => {
       questionNumber: model.questionNumber - 1,
       hideQuestion,
     };
-    await monacoInit(updateState);
-    await codeHeighLight(updateState);
-    setModel(updateState);
+    await updateModel(updateState);
   };
 
   const handleSubmit = async () => {
@@ -72,6 +69,36 @@ const App: React.FC = () => {
     const updateState = { ...model, complete: true };
     setModel(updateState);
     submitAnswersDialog(updateState);
+  };
+
+  const handleChangeCandidate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updateState = {
+      ...model,
+      candidateID: e.target.value,
+    };
+    setModel(updateState);
+  };
+
+  const updateModel = async (update: MainModel) => {
+    await codeHeighLight(update);
+    setModel(update);
+
+    console.log("update: ", update);
+    setTimeout(async () => {
+      await disposeEditor();
+      await waitUntilEditorDefine(update);
+      console.log("window.currentEditor: ", window.currentEditor);
+      if (window.currentEditor) {
+        window.currentEditor.getModel().onDidChangeContent(() => {
+          var text = window.currentEditor.getValue();
+          console.log("model: ", update);
+          update.questions = update.questions.map((q) =>
+            q.no === update.questionNumber ? { ...q, script: text } : q
+          );
+          setModel(update);
+        });
+      }
+    });
   };
 
   const currentQuestion = model.questions.find(
@@ -102,7 +129,11 @@ const App: React.FC = () => {
     <div className="container" style={{ paddingBottom: "50px" }}>
       {model.questionNumber == 0 ? (
         <>
-          <StartBadge model={model} onStart={handleStart} />
+          <StartBadge
+            model={model}
+            onStart={handleStart}
+            onChangeCandidateID={handleChangeCandidate}
+          />
           <DownloadLink model={model} />
         </>
       ) : (
@@ -139,7 +170,6 @@ const App: React.FC = () => {
           ) : (
             <></>
           )}
-
           <FinishBadge
             question={currentQuestion}
             showFinishBadge={currentQuestion.title === "FINISH"}

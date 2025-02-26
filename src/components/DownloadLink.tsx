@@ -7,14 +7,19 @@ interface Props {
 
 const DownloadLink: React.FC<Props> = ({ model }) => (
   <div>
-    <p className="text-bold-load">Download Programmer</p>
+    <p className="text-bold-load">Resource</p>
 
     <p>
-      Exam JS TDD (Junior Developer):
+      Exam Basic JS (Junior Developer):
       <a href="https://github.com/iTopPlus/ExamJSTDD">Exam JS TDD</a>
     </p>
 
-    <p className="text-bold-load">Download</p>
+    <p>
+      Exam Basic TDD (Junior Developer):
+      <a href="https://github.com/tonmanna/TDDLab1">Exam TDD Approach</a>
+    </p>
+
+    <p className="text-bold-load">Other candidate center</p>
 
     <p>
       ClosePackage Lab (Resource for Data Sci):
@@ -26,7 +31,7 @@ const DownloadLink: React.FC<Props> = ({ model }) => (
       <a href="./">Excel Test Exam II (Test_Website Job)</a>
     </p>
     <div className="text-bold-load">
-      Staff Section Exam question (Full Stack Developer):
+      Staff Section (Full Stack Developer):
       <div></div>
       <label className="badge badge-secondary" style={{ margin: "5px" }}>
         Candidate ID:
