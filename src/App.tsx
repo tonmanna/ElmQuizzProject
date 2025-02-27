@@ -142,7 +142,7 @@ const App: React.FC = () => {
   };
 
   const handleQuizList = async () => {
-    const quizList = await fetchQuizList();
+    const quizList = await fetchQuizList(password);
     setQuizList(quizList);
   };
 

@@ -28,8 +28,8 @@ export const submitAnswers = async (model: MainModel): Promise<void> => {
   });
 };
 
-export const fetchQuizList = async (): Promise<QuizResult[]> => {
-  const response = await fetch(`${hostName}/getQuizList`);
+export const fetchQuizList = async (token: string): Promise<QuizResult[]> => {
+  const response = await fetch(`${hostName}/getQuizList?token=${token}`);
   const data = await response.json();
   return data;
 };
