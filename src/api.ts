@@ -1,7 +1,7 @@
 import { MainModel, QuestionModel } from "./types";
-declare let windows: any;
+declare let window: any;
 const hostName =
-  windows.location.hostname == "localhost"
+  window.location.hostname == "localhost"
     ? "http://localhost:4000"
     : "https://exam.itopplus.com/";
 export const fetchQuestions = async (): Promise<QuestionModel[]> => {
