@@ -3,7 +3,7 @@ import { MainModel } from "../../types";
 export default (model: MainModel) => {
   function showDialog() {
     // Get the snackbar DIV
-    var x = document.getElementById("snackbar");
+    const x = document.getElementById("snackbar");
     if (x == null) {
       return;
     }

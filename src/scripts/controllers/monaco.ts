@@ -2,6 +2,7 @@ import "monaco-editor/esm/vs/editor/editor.all.js";
 import "monaco-editor/esm/vs/editor/standalone/browser/accessibilityHelp/accessibilityHelp.js";
 import * as monaco from "monaco-editor";
 import { MainModel } from "../../types";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let window: any;
 
 async function sleep(ms: number) {

@@ -18,6 +18,7 @@ import codeHeighLight from "./scripts/controllers/code_heighlight";
 import submitAnswersDialog from "./scripts/controllers/submit_answer";
 import QuizList from "./components/QuizList";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let window: any;
 const initialModel: MainModel = {
   questions: [],
@@ -114,7 +115,7 @@ const App: React.FC = () => {
         ...model,
         candidateSubmitID: candidateSubmitID,
       };
-      let previousModel = await fetchQuizResult(updateState);
+      const previousModel = await fetchQuizResult(updateState);
       if (previousModel) {
         previousModel.hiddenQuestion = false;
         previousModel.questionNumber = 1;
@@ -123,7 +124,7 @@ const App: React.FC = () => {
     };
 
   const handleCheckResult = async () => {
-    let previousModel = await fetchQuizResult(model);
+    const previousModel = await fetchQuizResult(model);
     if (previousModel) {
       previousModel.hiddenQuestion = false;
       previousModel.questionNumber = 1;
@@ -154,7 +155,7 @@ const App: React.FC = () => {
     await waitUntilEditorDefine(update);
     if (window.currentEditor) {
       window.currentEditor.getModel().onDidChangeContent(() => {
-        var text = window.currentEditor.getValue();
+        const text = window.currentEditor.getValue();
         update.questions = update.questions.map((q) =>
           q.no === update.questionNumber ? { ...q, script: text } : q
         );

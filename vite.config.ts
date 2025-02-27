@@ -4,31 +4,24 @@ import { defineConfig } from "vite";
 
 import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
-import MarkdownIt from "markdown-it";
+import { type IMonacoEditorOpts } from "vite-plugin-monaco-editor";
+import monacoEditorEsmPlugin from "vite-plugin-monaco-editor-esm";
 
 export default defineConfig({
   plugins: [
     react(),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    monacoEditorEsmPlugin(),
     legacy({
       targets: ["defaults", "not IE 11"],
     }),
   ],
   build: {
-    chunkSizeWarningLimit: 3072,
+    chunkSizeWarningLimit: 4092,
     outDir: "./dist",
     rollupOptions: {
       input: {
         Main: resolve(__dirname, "index.html"),
-      },
-      output: {
-        manualChunks: {
-          mermaid: ["mermaid"],
-          monacoEditor: ["monaco-editor"],
-          prismjs: ["prismjs"],
-          markdownIt: ["markdown-it"],
-          react: ["react"],
-          reactDom: ["react-dom"],
-        },
       },
     },
   },

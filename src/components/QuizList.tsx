@@ -40,6 +40,7 @@ const QuizList: React.FC<Props> = ({
           <input
             style={{ margin: "5px" }}
             value={password}
+            type="password"
             onChange={onChangePassword}
           />
           <span
