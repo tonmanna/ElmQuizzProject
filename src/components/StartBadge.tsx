@@ -29,8 +29,10 @@ const StartBadge: React.FC<Props> = ({
     </p>
     <p style={{ fontSize: "20px", wordSpacing: "5px" }}>
       &nbsp;Trust in your journey. Each step makes the way clearer; your choices
-      become your lessons. The only way to know is to simply press "Start".
+      become your lessons. The only way to know is to simply press{" "}
+      <b>"Start"</b>.<br />
     </p>
+
     <p>
       <label className="badge badge-secondary">
         Candidate Name :

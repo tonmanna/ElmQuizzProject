@@ -1,7 +1,8 @@
 import React from "react";
-import { QuestionModel } from "../types";
+import { MainModel, QuestionModel } from "../types";
 
 interface Props {
+  model: MainModel;
   question: QuestionModel;
   onNext: () => void;
   onBack: () => void;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const Question: React.FC<Props> = ({
+  model,
   question,
   onNext,
   onBack,
@@ -16,7 +18,7 @@ const Question: React.FC<Props> = ({
 }) => (
   <div>
     <div
-      style={{ position: "fixed", right: "0", top: "0", marginRight: "20px" }}
+      style={{ position: "fixed", right: "0", top: "5px", marginRight: "20px" }}
     >
       <button
         className="btn btn-warning"
@@ -52,6 +54,18 @@ const Question: React.FC<Props> = ({
         Script:
         <div id={`container${question.no}`} style={{ height: "400px" }}></div>
       </div>
+    </div>
+    <div
+      style={{
+        position: "fixed",
+        bottom: "0",
+        right: "0",
+        marginRight: "20px",
+      }}
+    >
+      <label className="badge badge-secondary" style={{ margin: "5px" }}>
+        Candidate Name : {model.candidateID} : {model.startDate}
+      </label>
     </div>
   </div>
 );

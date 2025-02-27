@@ -9,7 +9,6 @@ async function sleep(ms: number) {
 }
 export async function waitUntilEditorDefine(model: MainModel) {
   const element = "container" + model.questionNumber;
-  console.log("element: ", element);
   const editor = document.getElementById(element);
   if (editor == null) {
     await sleep(100);

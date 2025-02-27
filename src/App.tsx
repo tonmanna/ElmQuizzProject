@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MainModel } from "./types";
-import { fetchQuestions, submitAnswers } from "./api";
+import { fetchQuestions, fetchQuizResult, submitAnswers } from "./api";
 import StartBadge from "./components/StartBadge";
 import FinishBadge from "./components/FinishBadge";
 import Question from "./components/Question";
@@ -33,11 +33,13 @@ const App: React.FC = () => {
 
   const handleStart = async () => {
     const questions = await fetchQuestions();
-    const updateState = {
+    const updateState: MainModel = {
       ...model,
       questions,
       hiddenQuestion: false,
       questionNumber: 1,
+      candidateID: model.candidateID || "Anonymous",
+      startDate: new Date().toLocaleString(),
     };
     await updateModel(updateState);
   };
@@ -65,9 +67,9 @@ const App: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    await submitAnswers(model);
     const updateState = { ...model, complete: true };
     setModel(updateState);
+    await submitAnswers(updateState);
     submitAnswersDialog(updateState);
   };
 
@@ -75,6 +77,16 @@ const App: React.FC = () => {
     const updateState = {
       ...model,
       candidateID: e.target.value,
+    };
+    setModel(updateState);
+  };
+
+  const handleChangeCandidateSubmitID = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const updateState = {
+      ...model,
+      candidateSubmitID: e.target.value,
     };
     setModel(updateState);
   };
@@ -93,6 +105,15 @@ const App: React.FC = () => {
         );
         setModel(update);
       });
+    }
+  };
+
+  const handleCheckResult = async () => {
+    let previousModel = await fetchQuizResult(model);
+    if (previousModel) {
+      previousModel.hiddenQuestion = false;
+      previousModel.questionNumber = 1;
+      setModel(previousModel);
     }
   };
 
@@ -129,13 +150,18 @@ const App: React.FC = () => {
             onStart={handleStart}
             onChangeCandidateID={handleChangeCandidate}
           />
-          <DownloadLink model={model} />
+          <DownloadLink
+            model={model}
+            onCheckResult={handleCheckResult}
+            onChangeCandidateSubmitID={handleChangeCandidateSubmitID}
+          />
         </>
       ) : (
         <>
           {model.questionNumber <= model.questions.length ? (
             <>
               <Question
+                model={model}
                 question={currentQuestion}
                 onNext={handleNext}
                 onBack={handleBack}

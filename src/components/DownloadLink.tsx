@@ -3,9 +3,16 @@ import { MainModel } from "../types";
 
 interface Props {
   model: MainModel;
+
+  onChangeCandidateSubmitID: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onCheckResult: () => void;
 }
 
-const DownloadLink: React.FC<Props> = ({ model }) => (
+const DownloadLink: React.FC<Props> = ({
+  model,
+  onCheckResult,
+  onChangeCandidateSubmitID,
+}) => (
   <div>
     <p className="text-bold-load">Resource</p>
 
@@ -36,11 +43,26 @@ const DownloadLink: React.FC<Props> = ({ model }) => (
       <label className="badge badge-secondary" style={{ margin: "5px" }}>
         Candidate ID:
       </label>
-      <input style={{ margin: "5px" }} value={model.candidateSubmitID} />
-      <span className="btn btn-primary btn-lg" style={{ margin: "5px" }}>
+      <input
+        style={{ margin: "5px" }}
+        value={model.candidateSubmitID}
+        onChange={onChangeCandidateSubmitID}
+      />
+      <span
+        className="btn btn-primary btn-lg"
+        style={{ margin: "5px" }}
+        onClick={onCheckResult}
+      >
         Check Result »
       </span>
     </div>
+    <p style={{ fontSize: "20px", wordSpacing: "5px", paddingTop: "20px" }}>
+      <b>
+        Special thanks to ITOPPLUS Senior Developer Team.
+        <br />
+        <label>@juranger @tonmanna @worawut</label>
+      </b>
+    </p>
   </div>
 );
 
