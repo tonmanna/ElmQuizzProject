@@ -4,7 +4,6 @@ import { defineConfig } from "vite";
 
 import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
-import { type IMonacoEditorOpts } from "vite-plugin-monaco-editor";
 import monacoEditorEsmPlugin from "vite-plugin-monaco-editor-esm";
 
 export default defineConfig({
@@ -22,6 +21,16 @@ export default defineConfig({
     rollupOptions: {
       input: {
         Main: resolve(__dirname, "index.html"),
+      },
+      output: {
+        manualChunks: {
+          mermaid: ["mermaid"],
+          monacoEditor: ["monaco-editor"],
+          prismjs: ["prismjs"],
+          markdownIt: ["markdown-it"],
+          react: ["react"],
+          reactDom: ["react-dom"],
+        },
       },
     },
   },
