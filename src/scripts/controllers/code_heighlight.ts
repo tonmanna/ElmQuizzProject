@@ -26,8 +26,20 @@ function renderPrism(content: QuestionModel, model: MainModel) {
   $(codeID).append(html);
 }
 function renderMarkDownIT(content: QuestionModel, model: MainModel) {
+  var defaultRender =
+    md.renderer.rules.link_open ||
+    function (tokens, idx, options, env, self) {
+      return self.renderToken(tokens, idx, options);
+    };
+
   var markdownID = "#markdown" + model.questionNumber;
+
+  md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+    tokens[idx].attrSet("target", "_blank");
+    return defaultRender(tokens, idx, options, env, self);
+  };
   var mdHtml = md.render(content.markdown);
+
   $(markdownID).empty();
   $(markdownID).append(mdHtml);
 }

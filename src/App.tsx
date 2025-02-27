@@ -33,6 +33,11 @@ const App: React.FC = () => {
 
   const handleStart = async () => {
     const questions = await fetchQuestions();
+    let questionNumber = 1;
+    questions.map((q) => {
+      q.no = questionNumber++;
+      return q;
+    });
     const updateState: MainModel = {
       ...model,
       questions,
@@ -128,7 +133,7 @@ const App: React.FC = () => {
     code: "",
     markdown: "",
     script: "",
-    questionType: false,
+    codeQuestion: false,
   };
 
   const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

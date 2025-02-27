@@ -17,7 +17,7 @@ type alias QuestionListModel =
 
 
 type alias Question =
-    { no : Int, title : String, answer : String, language : String, mermaid : String, code : String, markdown : String, script: String, questionType: Bool }
+    { no : Int, title : String, answer : String, language : String, mermaid : String, code : String, markdown : String, script: String, codeQuestion: Bool }
 
 
 type Msg
@@ -40,7 +40,7 @@ type Msg
 
 initQuestion : Question
 initQuestion =
-    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", language = "javascript", markdown = "", script = "" , questionType = False}
+    { no = 0, title = "FINISH", answer = "", mermaid = "", code = "", language = "javascript", markdown = "", script = "" , codeQuestion = False}
 
 newPostEncoder : QuestionListModel -> Encode.Value
 newPostEncoder model =
@@ -90,7 +90,7 @@ questionDecoder =
         |> required "code" string
         |> required "markdown" string
         |> required "script" string
-        |> required "questionType" bool
+        |> required "codeQuestion" bool
 
 
 errorToString : Http.Error -> String
@@ -236,8 +236,8 @@ viewQuestion question notShowQuestion =
             , div [ id ("markdown" ++ String.fromInt question.no) ] []
             , div [ class "container", hidden notShowQuestion ] [ viewNextBack question ]
             , div [ style "height" "30px"] []
-            , textarea [ hidden (question.questionType) , class "form-control", placeholder "Please explain solution here.", rows 5, onInput InputAnswer, value question.answer ] []
-            , p [ hidden (not question.questionType) ,style "padding-top" "20px"] [ Html.text "Script :", div [ id ("container" ++ String.fromInt question.no), style "height" "400px" ] []]
+            , textarea [ hidden (question.codeQuestion) , class "form-control", placeholder "Please explain solution here.", rows 5, onInput InputAnswer, value question.answer ] []
+            , p [ hidden (not question.codeQuestion) ,style "padding-top" "20px"] [ Html.text "Script :", div [ id ("container" ++ String.fromInt question.no), style "height" "400px" ] []]
             ]
             
         ]

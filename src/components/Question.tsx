@@ -43,14 +43,14 @@ const Question: React.FC<Props> = ({
       </pre>
       <div id={`markdown${question.no}`}></div>
       <textarea
-        hidden={question.questionType}
+        hidden={question.codeQuestion}
         className="form-control"
         placeholder="Please explain solution here."
         rows={5}
         value={question.answer}
         onChange={onChangeText}
       ></textarea>
-      <div hidden={!question.questionType} style={{ paddingTop: "20px" }}>
+      <div hidden={!question.codeQuestion} style={{ paddingTop: "20px" }}>
         Script:
         <div id={`container${question.no}`} style={{ height: "400px" }}></div>
       </div>

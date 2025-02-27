@@ -7,7 +7,7 @@ export interface QuestionModel {
   code: string;
   markdown: string;
   script: string;
-  questionType: boolean;
+  codeQuestion: boolean;
 }
 
 export interface MainModel {
