@@ -31,7 +31,7 @@ const DownloadLink: React.FC<Props> = ({ model }) => (
       <a href="./">Excel Test Exam II (Test_Website Job)</a>
     </p>
     <div className="text-bold-load">
-      Staff Section (Full Stack Developer):
+      Staff Section (Get Id from Backend System):
       <div></div>
       <label className="badge badge-secondary" style={{ margin: "5px" }}>
         Candidate ID:

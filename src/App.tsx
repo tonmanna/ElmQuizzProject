@@ -83,22 +83,17 @@ const App: React.FC = () => {
     await codeHeighLight(update);
     setModel(update);
 
-    console.log("update: ", update);
-    setTimeout(async () => {
-      await disposeEditor();
-      await waitUntilEditorDefine(update);
-      console.log("window.currentEditor: ", window.currentEditor);
-      if (window.currentEditor) {
-        window.currentEditor.getModel().onDidChangeContent(() => {
-          var text = window.currentEditor.getValue();
-          console.log("model: ", update);
-          update.questions = update.questions.map((q) =>
-            q.no === update.questionNumber ? { ...q, script: text } : q
-          );
-          setModel(update);
-        });
-      }
-    });
+    await disposeEditor();
+    await waitUntilEditorDefine(update);
+    if (window.currentEditor) {
+      window.currentEditor.getModel().onDidChangeContent(() => {
+        var text = window.currentEditor.getValue();
+        update.questions = update.questions.map((q) =>
+          q.no === update.questionNumber ? { ...q, script: text } : q
+        );
+        setModel(update);
+      });
+    }
   };
 
   const currentQuestion = model.questions.find(
