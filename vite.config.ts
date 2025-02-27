@@ -4,6 +4,8 @@ import { defineConfig } from "vite";
 
 import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
+import MarkdownIt from "markdown-it";
+
 export default defineConfig({
   plugins: [
     react(),
@@ -12,10 +14,21 @@ export default defineConfig({
     }),
   ],
   build: {
+    chunkSizeWarningLimit: 3072,
     outDir: "./dist",
     rollupOptions: {
       input: {
         Main: resolve(__dirname, "index.html"),
+      },
+      output: {
+        manualChunks: {
+          mermaid: ["mermaid"],
+          monacoEditor: ["monaco-editor"],
+          prismjs: ["prismjs"],
+          markdownIt: ["markdown-it"],
+          react: ["react"],
+          reactDom: ["react-dom"],
+        },
       },
     },
   },
