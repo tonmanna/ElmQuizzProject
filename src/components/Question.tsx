@@ -43,6 +43,7 @@ const Question: React.FC<Props> = ({
       </pre>
       <div id={`markdown${question.no}`}></div>
       <textarea
+        style={{ height: "300px" }}
         hidden={question.codeQuestion}
         className="form-control"
         placeholder="Please explain solution here."

@@ -20,3 +20,9 @@ export interface MainModel {
   complete: boolean;
   startDate: string;
 }
+
+export interface QuizResult {
+  id: string;
+  name: string;
+  timestamp: Date;
+}

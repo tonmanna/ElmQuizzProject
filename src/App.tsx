@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { MainModel } from "./types";
-import { fetchQuestions, fetchQuizResult, submitAnswers } from "./api";
+import { MainModel, QuizResult } from "./types";
+import {
+  fetchQuestions,
+  fetchQuizList,
+  fetchQuizResult,
+  submitAnswers,
+} from "./api";
 import StartBadge from "./components/StartBadge";
 import FinishBadge from "./components/FinishBadge";
 import Question from "./components/Question";
@@ -11,6 +16,7 @@ import {
 } from "./scripts/controllers/monaco";
 import codeHeighLight from "./scripts/controllers/code_heighlight";
 import submitAnswersDialog from "./scripts/controllers/submit_answer";
+import QuizList from "./components/QuizList";
 
 declare let window: any;
 const initialModel: MainModel = {
@@ -26,6 +32,8 @@ const initialModel: MainModel = {
 
 const App: React.FC = () => {
   const [model, setModel] = useState<MainModel>(initialModel);
+  const [password, setPassword] = useState<string>("");
+  const [quizList, setQuizList] = useState<QuizResult[]>([]);
 
   useEffect(() => {
     // Fetch initial data if needed
@@ -86,6 +94,10 @@ const App: React.FC = () => {
     setModel(updateState);
   };
 
+  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
   const handleChangeCandidateSubmitID = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -94,6 +106,44 @@ const App: React.FC = () => {
       candidateSubmitID: e.target.value,
     };
     setModel(updateState);
+  };
+
+  const handleChangeCandidateSubmitByID =
+    (candidateSubmitID: string) => async () => {
+      const updateState = {
+        ...model,
+        candidateSubmitID: candidateSubmitID,
+      };
+      let previousModel = await fetchQuizResult(updateState);
+      if (previousModel) {
+        previousModel.hiddenQuestion = false;
+        previousModel.questionNumber = 1;
+        setModel(previousModel);
+      }
+    };
+
+  const handleCheckResult = async () => {
+    let previousModel = await fetchQuizResult(model);
+    if (previousModel) {
+      previousModel.hiddenQuestion = false;
+      previousModel.questionNumber = 1;
+      setModel(previousModel);
+    }
+  };
+
+  const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const updateState = {
+      ...model,
+      questions: model.questions.map((q) =>
+        q.no === model.questionNumber ? { ...q, answer: e.target.value } : q
+      ),
+    };
+    setModel(updateState);
+  };
+
+  const handleQuizList = async () => {
+    const quizList = await fetchQuizList();
+    setQuizList(quizList);
   };
 
   const updateModel = async (update: MainModel) => {
@@ -113,15 +163,6 @@ const App: React.FC = () => {
     }
   };
 
-  const handleCheckResult = async () => {
-    let previousModel = await fetchQuizResult(model);
-    if (previousModel) {
-      previousModel.hiddenQuestion = false;
-      previousModel.questionNumber = 1;
-      setModel(previousModel);
-    }
-  };
-
   const currentQuestion = model.questions.find(
     (q) => q.no === model.questionNumber
   ) || {
@@ -134,16 +175,6 @@ const App: React.FC = () => {
     markdown: "",
     script: "",
     codeQuestion: false,
-  };
-
-  const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const updateState = {
-      ...model,
-      questions: model.questions.map((q) =>
-        q.no === model.questionNumber ? { ...q, answer: e.target.value } : q
-      ),
-    };
-    setModel(updateState);
   };
 
   return (
@@ -160,6 +191,22 @@ const App: React.FC = () => {
             onCheckResult={handleCheckResult}
             onChangeCandidateSubmitID={handleChangeCandidateSubmitID}
           />
+          <QuizList
+            model={quizList}
+            password={password}
+            onGetQuizList={handleQuizList}
+            onChangePassword={handleChangePassword}
+            onGetQuizResult={handleChangeCandidateSubmitByID}
+          />
+          <p
+            style={{ fontSize: "20px", wordSpacing: "5px", paddingTop: "20px" }}
+          >
+            <b>
+              Special thanks to ITOPPLUS Senior Developer Team.
+              <br />
+              <label>@juranger @tonmanna @worawut</label>
+            </b>
+          </p>
         </>
       ) : (
         <>

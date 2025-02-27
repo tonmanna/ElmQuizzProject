@@ -1,4 +1,4 @@
-import { MainModel, QuestionModel } from "./types";
+import { MainModel, QuestionModel, QuizResult } from "./types";
 declare let window: any;
 const hostName =
   window.location.hostname == "localhost"
@@ -26,4 +26,10 @@ export const submitAnswers = async (model: MainModel): Promise<void> => {
     },
     body: JSON.stringify(model),
   });
+};
+
+export const fetchQuizList = async (): Promise<QuizResult[]> => {
+  const response = await fetch(`${hostName}/getQuizList`);
+  const data = await response.json();
+  return data;
 };

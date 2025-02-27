@@ -38,8 +38,6 @@ const DownloadLink: React.FC<Props> = ({
       <a href="./">Excel Test Exam II (Test_Website Job)</a>
     </p>
     <div className="text-bold-load">
-      Staff Section (Get Id from Backend System):
-      <div></div>
       <label className="badge badge-secondary" style={{ margin: "5px" }}>
         Candidate ID:
       </label>
@@ -49,20 +47,13 @@ const DownloadLink: React.FC<Props> = ({
         onChange={onChangeCandidateSubmitID}
       />
       <span
-        className="btn btn-primary btn-lg"
+        className="btn btn-primary"
         style={{ margin: "5px" }}
         onClick={onCheckResult}
       >
         Check Result »
       </span>
     </div>
-    <p style={{ fontSize: "20px", wordSpacing: "5px", paddingTop: "20px" }}>
-      <b>
-        Special thanks to ITOPPLUS Senior Developer Team.
-        <br />
-        <label>@juranger @tonmanna @worawut</label>
-      </b>
-    </p>
   </div>
 );
 
