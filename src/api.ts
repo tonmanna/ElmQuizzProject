@@ -3,7 +3,7 @@ declare let window: any;
 const hostName =
   window.location.hostname == "localhost"
     ? "http://localhost:4000"
-    : "https://exam.itopplus.com/";
+    : "https://exam.itopplus.com";
 export const fetchQuestions = async (): Promise<QuestionModel[]> => {
   const response = await fetch(`${hostName}/getQuiz`);
   const data = await response.json();
