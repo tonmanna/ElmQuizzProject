@@ -17,20 +17,9 @@ const QuizList: React.FC<Props> = ({
   onChangePassword,
   onGetQuizResult,
 }) => (
-  <div
-    className="card"
-    style={{
-      position: "absolute",
-      top: "calc(100% - 500px)",
-      right: "calc(0%)",
-      transform: "translate(-50%, -50%)",
-    }}
-  >
+  <div className="card" style={{}}>
     <div>
-      <div
-        className="card-body"
-        style={{ maxWidth: "500px", margin: "auto", overflowY: "scroll" }}
-      >
+      <div className="card-body">
         <h5 className="card-title">Staff Section</h5>
         <div className="text-bold-load">
           <div></div>
@@ -54,12 +43,12 @@ const QuizList: React.FC<Props> = ({
         {model.length === 0 ? (
           <></>
         ) : (
-          <table>
+          <table className="table table-striped">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Date</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date</th>
               </tr>
             </thead>
             <tbody>

@@ -16,7 +16,7 @@ const Question: React.FC<Props> = ({
   onBack,
   onChangeText,
 }) => (
-  <div>
+  <div style={{ padding: "20px" }}>
     <div
       style={{ position: "fixed", right: "0", top: "5px", marginRight: "20px" }}
     >
@@ -35,15 +35,17 @@ const Question: React.FC<Props> = ({
         Next
       </button>
     </div>
-    <div className="mb-3">
-      <label htmlFor="address">{`${question.no}. ${question.title}`}</label>
+    <div>
+      <label
+        style={{ fontWeight: "bold", fontSize: "18px" }}
+      >{`${question.no}. ${question.title}`}</label>
       <div id={`mermaid${question.no}`}></div>
       <pre>
         <code id={`code${question.no}`} className="language-javascript"></code>
       </pre>
       <div id={`markdown${question.no}`}></div>
       <textarea
-        style={{ height: "300px" }}
+        style={{ height: "500px", minWidth: "800px" }}
         hidden={question.codeQuestion}
         className="form-control"
         placeholder="Please explain solution here."
@@ -53,7 +55,10 @@ const Question: React.FC<Props> = ({
       ></textarea>
       <div hidden={!question.codeQuestion} style={{ paddingTop: "20px" }}>
         Script:
-        <div id={`container${question.no}`} style={{ height: "400px" }}></div>
+        <div
+          id={`container${question.no}`}
+          style={{ height: "600px", minWidth: "800px" }}
+        ></div>
       </div>
     </div>
     <div
@@ -67,6 +72,23 @@ const Question: React.FC<Props> = ({
       <label className="badge badge-secondary" style={{ margin: "5px" }}>
         Candidate Name : {model.candidateID} : {model.startDate}
       </label>
+    </div>
+    <div style={{ margin: "20px" }}>
+      <button
+        className="btn btn-warning"
+        style={{ marginRight: "10px" }}
+        onClick={onBack}
+        disabled={model.questionNumber === 1}
+      >
+        Back
+      </button>
+      <button
+        className="btn btn-info"
+        onClick={onNext}
+        style={{ marginLeft: "5px" }}
+      >
+        Next
+      </button>
     </div>
   </div>
 );

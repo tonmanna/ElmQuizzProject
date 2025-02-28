@@ -15,7 +15,7 @@ import {
   waitUntilEditorDefine,
 } from "./scripts/controllers/monaco";
 import codeHeighLight from "./scripts/controllers/code_heighlight";
-import submitAnswersDialog from "./scripts/controllers/submit_answer";
+import { showDialog } from "./scripts/controllers/submit_answer";
 import QuizList from "./components/QuizList";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,7 +84,7 @@ const App: React.FC = () => {
     const updateState = { ...model, complete: true };
     setModel(updateState);
     await submitAnswers(updateState);
-    submitAnswersDialog(updateState);
+    showDialog(updateState.candidateID);
   };
 
   const handleChangeCandidate = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -187,27 +187,20 @@ const App: React.FC = () => {
             onStart={handleStart}
             onChangeCandidateID={handleChangeCandidate}
           />
-          <DownloadLink
-            model={model}
-            onCheckResult={handleCheckResult}
-            onChangeCandidateSubmitID={handleChangeCandidateSubmitID}
-          />
-          <QuizList
-            model={quizList}
-            password={password}
-            onGetQuizList={handleQuizList}
-            onChangePassword={handleChangePassword}
-            onGetQuizResult={handleChangeCandidateSubmitByID}
-          />
-          <p
-            style={{ fontSize: "20px", wordSpacing: "5px", paddingTop: "20px" }}
-          >
-            <b>
-              Special thanks to ITOPPLUS Senior Developer Team.
-              <br />
-              <label>@juranger @tonmanna @worawut</label>
-            </b>
-          </p>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <DownloadLink
+              model={model}
+              onCheckResult={handleCheckResult}
+              onChangeCandidateSubmitID={handleChangeCandidateSubmitID}
+            />
+            <QuizList
+              model={quizList}
+              password={password}
+              onGetQuizList={handleQuizList}
+              onChangePassword={handleChangePassword}
+              onGetQuizResult={handleChangeCandidateSubmitByID}
+            />
+          </div>
         </>
       ) : (
         <>
@@ -220,26 +213,6 @@ const App: React.FC = () => {
                 onBack={handleBack}
                 onChangeText={handleChangeText}
               />
-              <div
-                style={{
-                  marginRight: "20px",
-                }}
-              >
-                <button
-                  className="btn btn-warning"
-                  onClick={handleBack}
-                  disabled={model.questionNumber === 1}
-                >
-                  Back
-                </button>
-                <button
-                  className="btn btn-info"
-                  onClick={handleNext}
-                  style={{ marginLeft: "5px" }}
-                >
-                  Next
-                </button>
-              </div>
             </>
           ) : (
             <></>
