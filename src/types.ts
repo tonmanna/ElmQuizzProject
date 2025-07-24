@@ -19,6 +19,7 @@ export interface MainModel {
   errorMessage: string;
   complete: boolean;
   startDate: string;
+  selectedRole: string;
 }
 
 export interface QuizResult {

@@ -10,6 +10,7 @@ import StartBadge from "./components/StartBadge";
 import FinishBadge from "./components/FinishBadge";
 import Question from "./components/Question";
 import DownloadLink from "./components/DownloadLink";
+import BottomBadges from "./components/BottomBadges";
 import {
   disposeEditor,
   waitUntilEditorDefine,
@@ -29,6 +30,7 @@ const initialModel: MainModel = {
   errorMessage: "",
   complete: false,
   startDate: "",
+  selectedRole: "",
 };
 
 const App: React.FC = () => {
@@ -41,7 +43,7 @@ const App: React.FC = () => {
   }, []);
 
   const handleStart = async () => {
-    const questions = await fetchQuestions();
+    const questions = await fetchQuestions(model.selectedRole);
     let questionNumber = 1;
     questions.map((q) => {
       q.no = questionNumber++;
@@ -91,6 +93,14 @@ const App: React.FC = () => {
     const updateState = {
       ...model,
       candidateID: e.target.value,
+    };
+    setModel(updateState);
+  };
+
+  const handleChangeRole = (role: string) => {
+    const updateState = {
+      ...model,
+      selectedRole: role,
     };
     setModel(updateState);
   };
@@ -179,55 +189,65 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="container" style={{ paddingBottom: "50px" }}>
-      {model.questionNumber == 0 ? (
-        <>
-          <StartBadge
-            model={model}
-            onStart={handleStart}
-            onChangeCandidateID={handleChangeCandidate}
-          />
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <DownloadLink
+    <>
+      <div className="container" style={{ paddingBottom: "50px" }}>
+        {model.questionNumber == 0 ? (
+          <>
+            <StartBadge
               model={model}
-              onCheckResult={handleCheckResult}
-              onChangeCandidateSubmitID={handleChangeCandidateSubmitID}
+              onStart={handleStart}
+              onChangeCandidateID={handleChangeCandidate}
+              onChangeRole={handleChangeRole}
             />
-            <QuizList
-              model={quizList}
-              password={password}
-              onGetQuizList={handleQuizList}
-              onChangePassword={handleChangePassword}
-              onGetQuizResult={handleChangeCandidateSubmitByID}
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          {model.questionNumber <= model.questions.length ? (
-            <>
-              <Question
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <DownloadLink
                 model={model}
-                question={currentQuestion}
-                onNext={handleNext}
-                onBack={handleBack}
-                onChangeText={handleChangeText}
+                onCheckResult={handleCheckResult}
+                onChangeCandidateSubmitID={handleChangeCandidateSubmitID}
               />
-            </>
-          ) : (
-            <></>
-          )}
-          <FinishBadge
-            question={currentQuestion}
-            showFinishBadge={currentQuestion.title === "FINISH"}
-            hideSubmitButton={model.complete}
-            errorMessage={model.errorMessage}
-            onSubmit={handleSubmit}
-            onRecheck={handleBack}
-          />
-        </>
-      )}
-    </div>
+              <QuizList
+                model={quizList}
+                password={password}
+                onGetQuizList={handleQuizList}
+                onChangePassword={handleChangePassword}
+                onGetQuizResult={handleChangeCandidateSubmitByID}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            {model.questionNumber <= model.questions.length ? (
+              <>
+                <Question
+                  model={model}
+                  question={currentQuestion}
+                  onNext={handleNext}
+                  onBack={handleBack}
+                  onChangeText={handleChangeText}
+                />
+              </>
+            ) : (
+              <></>
+            )}
+            <FinishBadge
+              question={currentQuestion}
+              showFinishBadge={currentQuestion.title === "FINISH"}
+              hideSubmitButton={model.complete}
+              errorMessage={model.errorMessage}
+              onSubmit={handleSubmit}
+              onRecheck={handleBack}
+            />
+          </>
+        )}
+      </div>
+      <BottomBadges 
+        password={password}
+        quizList={quizList}
+        onChangePassword={handleChangePassword}
+        onGetQuizList={handleQuizList}
+        onGetQuizResult={handleChangeCandidateSubmitByID}
+      />
+    </>
   );
 };
 

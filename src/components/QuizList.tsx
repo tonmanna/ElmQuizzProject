@@ -17,7 +17,8 @@ const QuizList: React.FC<Props> = ({
   onChangePassword,
   onGetQuizResult,
 }) => (
-  <div className="card" style={{}}>
+  <div className="card" style={{ display: "none" }}>
+    {/* Staff section moved to BottomBadges popup - hiding static content */}
     <div>
       <div className="card-body">
         <h5 className="card-title">Staff Section</h5>

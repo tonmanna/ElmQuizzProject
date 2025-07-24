@@ -14,29 +14,7 @@ const DownloadLink: React.FC<Props> = ({
   onChangeCandidateSubmitID,
 }) => (
   <div>
-    <p className="text-bold-load">Resource</p>
-
-    <p>
-      Exam Basic JS (Junior Developer):
-      <a href="https://github.com/iTopPlus/ExamJSTDD">Exam JS TDD</a>
-    </p>
-
-    <p>
-      Exam Basic TDD (Junior Developer):
-      <a href="https://github.com/tonmanna/TDDLab1">Exam TDD Approach</a>
-    </p>
-
-    <p className="text-bold-load">Other candidate center</p>
-
-    <p>
-      ClosePackage Lab (Resource for Data Sci):
-      <a href="./">Excel Test Exam I(Close Job)</a>
-    </p>
-
-    <p>
-      Test Website Lab (Resource for Data Sci):
-      <a href="./">Excel Test Exam II (Test_Website Job)</a>
-    </p>
+    {/* Resource section moved to BottomBadges popup - hiding static content */}
     <div className="text-bold-load">
       <label className="badge badge-secondary" style={{ margin: "5px" }}>
         Candidate ID:

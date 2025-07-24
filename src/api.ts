@@ -6,9 +6,24 @@ const hostName =
   window.location.hostname == "localhost"
     ? "http://localhost:4000"
     : "https://exam.itopplus.com";
-export const fetchQuestions = async (): Promise<QuestionModel[]> => {
+export const fetchQuestions = async (role: string): Promise<QuestionModel[]> => {
   try {
-    const response = await fetch(`${hostName}/getQuiz`);
+    let endpoint = '/getQuiz'; // Default for DEVELOPER
+    
+    switch (role) {
+      case 'TESTER':
+        endpoint = '/getTesterQuiz';
+        break;
+      case 'DATA ENGINEER':
+        endpoint = '/getDataEngineerQuiz';
+        break;
+      case 'DEVELOPER':
+      default:
+        endpoint = '/getQuiz';
+        break;
+    }
+    
+    const response = await fetch(`${hostName}${endpoint}`);
     const data = await response.json();
     return data;
   } catch {

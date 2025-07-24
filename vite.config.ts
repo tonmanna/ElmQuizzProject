@@ -9,7 +9,6 @@ import monacoEditorEsmPlugin from "vite-plugin-monaco-editor-esm";
 export default defineConfig({
   plugins: [
     react(),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     monacoEditorEsmPlugin(),
     legacy({
       targets: ["defaults", "not IE 11"],
