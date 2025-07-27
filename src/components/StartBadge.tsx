@@ -113,15 +113,65 @@ const StartBadge: React.FC<Props> = ({
             Welcome to the ITOPPLUS Professional Assessment Platform. 
             Your expertise will be evaluated through our comprehensive examination system.
           </p>
-          <p style={{ 
-            fontSize: "14px",
-            color: "#9ca3af",
-            lineHeight: "1.6",
-            fontStyle: "italic"
+          {/* Important Warning Box */}
+          <div style={{
+            background: "linear-gradient(135deg, #fef3c7, #fed7aa)",
+            border: "2px solid #f59e0b",
+            borderRadius: "16px",
+            padding: "20px",
+            marginTop: "10px",
+            position: "relative",
+            overflow: "hidden"
           }}>
-            <strong>Important:</strong> Please ensure a stable connection. 
-            Refreshing the page will reset your progress.
-          </p>
+            <div style={{
+              position: "absolute",
+              top: "-50%",
+              right: "-50%",
+              width: "100px",
+              height: "100px",
+              background: "linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1))",
+              borderRadius: "50%",
+              zIndex: 0
+            }} />
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                marginBottom: "8px"
+              }}>
+                <div style={{
+                  fontSize: "24px",
+                  animation: "pulse 2s infinite"
+                }}>⚠️</div>
+                <strong style={{
+                  fontSize: "16px",
+                  color: "#92400e",
+                  fontWeight: "700",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px"
+                }}>
+                  Critical Notice
+                </strong>
+              </div>
+              <p style={{
+                fontSize: "15px",
+                color: "#92400e",
+                lineHeight: "1.6",
+                fontWeight: "600",
+                margin: "0"
+              }}>
+                Please ensure a stable internet connection. 
+                <span style={{ 
+                  color: "#dc2626", 
+                  fontWeight: "700",
+                  textDecoration: "underline"
+                }}>
+                  Refreshing the page will reset your progress
+                </span> and you'll need to start over.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Form Section */}
