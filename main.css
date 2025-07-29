@@ -13,11 +13,13 @@ body {
 
 .container {
   display: flex;
-  min-width: 1900px;
+  max-width: 95%;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  margin: 0 auto;
 }
 .container #root {
 }
