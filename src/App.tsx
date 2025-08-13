@@ -30,6 +30,7 @@ const initialModel: MainModel = {
   errorMessage: "",
   complete: false,
   startDate: "",
+  submitDate: "",
   selectedRole: "",
 };
 
@@ -83,7 +84,11 @@ const App: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const updateState = { ...model, complete: true };
+    const updateState = { 
+      ...model, 
+      complete: true,
+      submitDate: new Date().toISOString()
+    };
     setModel(updateState);
     await submitAnswers(updateState);
     showDialog(updateState.candidateID);
