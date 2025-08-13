@@ -20,44 +20,51 @@ const BottomBadges: React.FC<Props> = ({
   const [showStaff, setShowStaff] = useState(false);
 
   const resourcesData = [
-    { 
-      title: "Exam Basic JS (Junior Developer)", 
-      description: "https://github.com/iTopPlus/ExamJSTDD", 
+    {
+      title: "Exam Basic JS (Junior Developer)",
+      description: "https://github.com/iTopPlus/ExamJSTDD",
       icon: "💻",
-      link: "https://github.com/iTopPlus/ExamJSTDD"
+      link: "https://github.com/iTopPlus/ExamJSTDD",
     },
-    { 
-      title: "Exam Basic TDD (Junior Developer)", 
-      description: "https://github.com/tonmanna/TDDLab1", 
+    {
+      title: "Extraction Site for Firebase",
+      description: "https://firebase-json-export-itp.lovable.app/",
+      icon: "💻",
+      link: "https://firebase-json-export-itp.lovable.app/",
+    },
+    {
+      title: "Exam Basic TDD (Junior Developer)",
+      description: "https://github.com/tonmanna/TDDLab1",
       icon: "🧪",
-      link: "https://github.com/tonmanna/TDDLab1"
+      link: "https://github.com/tonmanna/TDDLab1",
     },
-    { 
-      title: "ClosePackage Lab (Resource for Data Sci)", 
-      description: "Excel Test Exam I(Close Job)", 
+    {
+      title: "ClosePackage Lab (Resource for Data Sci)",
+      description: "Excel Test Exam I(Close Job)",
       icon: "📊",
-      link: "./"
+      link: "./",
     },
-    { 
-      title: "Test Website Lab (Resource for Data Sci)", 
-      description: "Excel Test Exam II (Test_Website Job)", 
+    {
+      title: "Test Website Lab (Resource for Data Sci)",
+      description: "Excel Test Exam II (Test_Website Job)",
       icon: "🌐",
-      link: "./"
-    }
+      link: "./",
+    },
   ];
-
 
   return (
     <>
       {/* Bottom Badge Section */}
-      <div style={{
-        position: "fixed",
-        bottom: "20px",
-        right: "20px",
-        display: "flex",
-        gap: "12px",
-        zIndex: 1000
-      }}>
+      <div
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          display: "flex",
+          gap: "12px",
+          zIndex: 1000,
+        }}
+      >
         {/* Resources Badge */}
         <button
           onClick={() => {
@@ -66,11 +73,13 @@ const BottomBadges: React.FC<Props> = ({
           }}
           style={{
             padding: "12px 20px",
-            background: showResources 
-              ? "linear-gradient(135deg, #667eea, #764ba2)" 
+            background: showResources
+              ? "linear-gradient(135deg, #667eea, #764ba2)"
               : "rgba(255, 255, 255, 0.9)",
             color: showResources ? "#ffffff" : "#667eea",
-            border: `2px solid ${showResources ? "#667eea" : "rgba(102, 126, 234, 0.3)"}`,
+            border: `2px solid ${
+              showResources ? "#667eea" : "rgba(102, 126, 234, 0.3)"
+            }`,
             borderRadius: "25px",
             fontSize: "14px",
             fontWeight: "600",
@@ -80,7 +89,7 @@ const BottomBadges: React.FC<Props> = ({
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             display: "flex",
             alignItems: "center",
-            gap: "8px"
+            gap: "8px",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = "translateY(-2px)";
@@ -102,11 +111,13 @@ const BottomBadges: React.FC<Props> = ({
           }}
           style={{
             padding: "12px 20px",
-            background: showStaff 
-              ? "linear-gradient(135deg, #667eea, #764ba2)" 
+            background: showStaff
+              ? "linear-gradient(135deg, #667eea, #764ba2)"
               : "rgba(255, 255, 255, 0.9)",
             color: showStaff ? "#ffffff" : "#667eea",
-            border: `2px solid ${showStaff ? "#667eea" : "rgba(102, 126, 234, 0.3)"}`,
+            border: `2px solid ${
+              showStaff ? "#667eea" : "rgba(102, 126, 234, 0.3)"
+            }`,
             borderRadius: "25px",
             fontSize: "14px",
             fontWeight: "600",
@@ -116,7 +127,7 @@ const BottomBadges: React.FC<Props> = ({
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             display: "flex",
             alignItems: "center",
-            gap: "8px"
+            gap: "8px",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = "translateY(-2px)";
@@ -133,40 +144,46 @@ const BottomBadges: React.FC<Props> = ({
 
       {/* Resources Modal */}
       {showResources && (
-        <div style={{
-          position: "fixed",
-          bottom: "90px",
-          right: "20px",
-          width: "400px",
-          maxWidth: "calc(100vw - 40px)",
-          maxHeight: "calc(100vh - 120px)",
-          background: "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(20px)",
-          borderRadius: "16px",
-          padding: "0",
-          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.15)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-          zIndex: 999,
-          animation: "slideUp 0.3s ease-out",
-          overflow: "hidden"
-        }}>
+        <div
+          style={{
+            position: "fixed",
+            bottom: "90px",
+            right: "20px",
+            width: "400px",
+            maxWidth: "calc(100vw - 40px)",
+            maxHeight: "calc(100vh - 120px)",
+            background: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(20px)",
+            borderRadius: "16px",
+            padding: "0",
+            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.15)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            zIndex: 999,
+            animation: "slideUp 0.3s ease-out",
+            overflow: "hidden",
+          }}
+        >
           {/* Header */}
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "20px 24px 16px",
-            borderBottom: "1px solid rgba(102, 126, 234, 0.1)"
-          }}>
-            <h3 style={{
-              margin: 0,
-              fontSize: "18px",
-              fontWeight: "700",
-              background: "linear-gradient(135deg, #667eea, #764ba2)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text"
-            }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "20px 24px 16px",
+              borderBottom: "1px solid rgba(102, 126, 234, 0.1)",
+            }}
+          >
+            <h3
+              style={{
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: "700",
+                background: "linear-gradient(135deg, #667eea, #764ba2)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
               📚 Learning Resources
             </h3>
             <button
@@ -177,22 +194,30 @@ const BottomBadges: React.FC<Props> = ({
                 fontSize: "18px",
                 cursor: "pointer",
                 color: "#9ca3af",
-                padding: "4px"
+                padding: "4px",
               }}
             >
               ✕
             </button>
           </div>
-          
+
           {/* Content Area */}
-          <div style={{
-            padding: "0",
-            maxHeight: "400px",
-            overflowY: "auto"
-          }}>
+          <div
+            style={{
+              padding: "0",
+              maxHeight: "400px",
+              overflowY: "auto",
+            }}
+          >
             {/* Resource Items */}
             <div style={{ padding: "16px 24px" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
                 {resourcesData.map((resource, index) => (
                   <a
                     key={index}
@@ -208,105 +233,130 @@ const BottomBadges: React.FC<Props> = ({
                       transition: "all 0.2s ease",
                       textDecoration: "none",
                       color: "inherit",
-                      display: "block"
+                      display: "block",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "rgba(102, 126, 234, 0.1)";
+                      e.currentTarget.style.background =
+                        "rgba(102, 126, 234, 0.1)";
                       e.currentTarget.style.transform = "translateY(-1px)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "rgba(102, 126, 234, 0.05)";
+                      e.currentTarget.style.background =
+                        "rgba(102, 126, 234, 0.05)";
                       e.currentTarget.style.transform = "translateY(0)";
                     }}
                   >
-                    <div style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                      marginBottom: "8px"
-                    }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        marginBottom: "8px",
+                      }}
+                    >
                       <span style={{ fontSize: "20px" }}>{resource.icon}</span>
-                      <h4 style={{
-                        margin: 0,
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        color: "#374151"
-                      }}>
+                      <h4
+                        style={{
+                          margin: 0,
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          color: "#374151",
+                        }}
+                      >
                         {resource.title}
                       </h4>
                     </div>
-                    <p style={{
-                      margin: 0,
-                      fontSize: "12px",
-                      color: "#667eea",
-                      lineHeight: "1.4",
-                      fontWeight: "500"
-                    }}>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "12px",
+                        color: "#667eea",
+                        lineHeight: "1.4",
+                        fontWeight: "500",
+                      }}
+                    >
                       {resource.description}
                     </p>
                   </a>
                 ))}
               </div>
             </div>
-            
+
             {/* Resource Section - Integrated */}
-            <div style={{
-              borderTop: "1px solid rgba(102, 126, 234, 0.1)",
-              background: "rgba(102, 126, 234, 0.02)"
-            }}>
+            <div
+              style={{
+                borderTop: "1px solid rgba(102, 126, 234, 0.1)",
+                background: "rgba(102, 126, 234, 0.02)",
+              }}
+            >
               <div style={{ padding: "20px 24px" }}>
-                <h4 style={{
-                  margin: "0 0 16px 0",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  color: "#374151",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px"
-                }}>
+                <h4
+                  style={{
+                    margin: "0 0 16px 0",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                    color: "#374151",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
                   🎯 Quick Actions
                 </h4>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <button style={{
-                    padding: "12px 16px",
-                    background: "linear-gradient(135deg, #667eea, #764ba2)",
-                    color: "#ffffff",
-                    border: "none",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                    e.currentTarget.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}>
+                >
+                  <button
+                    style={{
+                      padding: "12px 16px",
+                      background: "linear-gradient(135deg, #667eea, #764ba2)",
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 4px 15px rgba(102, 126, 234, 0.3)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "none";
+                    }}
+                  >
                     📖 Access Documentation
                   </button>
-                  <button style={{
-                    padding: "12px 16px",
-                    background: "rgba(102, 126, 234, 0.1)",
-                    color: "#667eea",
-                    border: "1px solid rgba(102, 126, 234, 0.2)",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(102, 126, 234, 0.15)";
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(102, 126, 234, 0.1)";
-                    e.currentTarget.style.transform = "translateY(0)";
-                  }}>
+                  <button
+                    style={{
+                      padding: "12px 16px",
+                      background: "rgba(102, 126, 234, 0.1)",
+                      color: "#667eea",
+                      border: "1px solid rgba(102, 126, 234, 0.2)",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background =
+                        "rgba(102, 126, 234, 0.15)";
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background =
+                        "rgba(102, 126, 234, 0.1)";
+                      e.currentTarget.style.transform = "translateY(0)";
+                    }}
+                  >
                     💬 Get Support
                   </button>
                 </div>
@@ -318,40 +368,46 @@ const BottomBadges: React.FC<Props> = ({
 
       {/* Staff Modal */}
       {showStaff && (
-        <div style={{
-          position: "fixed",
-          bottom: "90px",
-          right: "20px",
-          width: "400px",
-          maxWidth: "calc(100vw - 40px)",
-          maxHeight: "calc(100vh - 120px)",
-          background: "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(20px)",
-          borderRadius: "16px",
-          padding: "0",
-          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.15)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-          zIndex: 999,
-          animation: "slideUp 0.3s ease-out",
-          overflow: "hidden"
-        }}>
+        <div
+          style={{
+            position: "fixed",
+            bottom: "90px",
+            right: "20px",
+            width: "400px",
+            maxWidth: "calc(100vw - 40px)",
+            maxHeight: "calc(100vh - 120px)",
+            background: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(20px)",
+            borderRadius: "16px",
+            padding: "0",
+            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.15)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            zIndex: 999,
+            animation: "slideUp 0.3s ease-out",
+            overflow: "hidden",
+          }}
+        >
           {/* Header */}
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "20px 24px 16px",
-            borderBottom: "1px solid rgba(102, 126, 234, 0.1)"
-          }}>
-            <h3 style={{
-              margin: 0,
-              fontSize: "18px",
-              fontWeight: "700",
-              background: "linear-gradient(135deg, #667eea, #764ba2)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text"
-            }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "20px 24px 16px",
+              borderBottom: "1px solid rgba(102, 126, 234, 0.1)",
+            }}
+          >
+            <h3
+              style={{
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: "700",
+                background: "linear-gradient(135deg, #667eea, #764ba2)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
               👥 Our Team
             </h3>
             <button
@@ -362,50 +418,70 @@ const BottomBadges: React.FC<Props> = ({
                 fontSize: "18px",
                 cursor: "pointer",
                 color: "#9ca3af",
-                padding: "4px"
+                padding: "4px",
               }}
             >
               ✕
             </button>
           </div>
-          
+
           {/* Content Area */}
-          <div style={{
-            padding: "0",
-            maxHeight: "400px",
-            overflowY: "auto"
-          }}>
+          <div
+            style={{
+              padding: "0",
+              maxHeight: "400px",
+              overflowY: "auto",
+            }}
+          >
             {/* Admin Access Section */}
             <div style={{ padding: "16px 24px" }}>
-              <div style={{ 
-                display: "flex", 
-                flexDirection: "column", 
-                gap: "16px",
-                background: "rgba(102, 126, 234, 0.05)",
-                borderRadius: "12px",
-                padding: "16px",
-                border: "1px solid rgba(102, 126, 234, 0.1)"
-              }}>
-                <h4 style={{
-                  margin: 0,
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  color: "#374151",
+              <div
+                style={{
                   display: "flex",
-                  alignItems: "center",
-                  gap: "8px"
-                }}>
+                  flexDirection: "column",
+                  gap: "16px",
+                  background: "rgba(102, 126, 234, 0.05)",
+                  borderRadius: "12px",
+                  padding: "16px",
+                  border: "1px solid rgba(102, 126, 234, 0.1)",
+                }}
+              >
+                <h4
+                  style={{
+                    margin: 0,
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: "#374151",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
                   🔐 Staff Access Portal
                 </h4>
-                
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <label style={{
-                      fontSize: "12px",
-                      fontWeight: "500",
-                      color: "#6b7280",
-                      minWidth: "70px"
-                    }}>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    <label
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: "500",
+                        color: "#6b7280",
+                        minWidth: "70px",
+                      }}
+                    >
                       Token ID:
                     </label>
                     <input
@@ -420,11 +496,11 @@ const BottomBadges: React.FC<Props> = ({
                         border: "1px solid rgba(102, 126, 234, 0.2)",
                         borderRadius: "6px",
                         background: "#ffffff",
-                        outline: "none"
+                        outline: "none",
                       }}
                     />
                   </div>
-                  
+
                   <button
                     onClick={onGetQuizList}
                     style={{
@@ -436,11 +512,12 @@ const BottomBadges: React.FC<Props> = ({
                       fontSize: "12px",
                       fontWeight: "500",
                       cursor: "pointer",
-                      transition: "all 0.2s ease"
+                      transition: "all 0.2s ease",
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = "translateY(-1px)";
-                      e.currentTarget.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+                      e.currentTarget.style.boxShadow =
+                        "0 4px 15px rgba(102, 126, 234, 0.3)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = "translateY(0)";
@@ -451,27 +528,33 @@ const BottomBadges: React.FC<Props> = ({
                   </button>
                 </div>
               </div>
-              
+
               {/* Quiz Results Table */}
               {quizList.length > 0 && (
                 <div style={{ marginTop: "16px" }}>
-                  <div style={{
-                    background: "rgba(102, 126, 234, 0.02)",
-                    borderRadius: "12px",
-                    border: "1px solid rgba(102, 126, 234, 0.1)",
-                    overflow: "hidden"
-                  }}>
-                    <div style={{
-                      padding: "12px 16px",
-                      background: "rgba(102, 126, 234, 0.1)",
-                      borderBottom: "1px solid rgba(102, 126, 234, 0.1)"
-                    }}>
-                      <h5 style={{
-                        margin: 0,
-                        fontSize: "13px",
-                        fontWeight: "600",
-                        color: "#374151"
-                      }}>
+                  <div
+                    style={{
+                      background: "rgba(102, 126, 234, 0.02)",
+                      borderRadius: "12px",
+                      border: "1px solid rgba(102, 126, 234, 0.1)",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        padding: "12px 16px",
+                        background: "rgba(102, 126, 234, 0.1)",
+                        borderBottom: "1px solid rgba(102, 126, 234, 0.1)",
+                      }}
+                    >
+                      <h5
+                        style={{
+                          margin: 0,
+                          fontSize: "13px",
+                          fontWeight: "600",
+                          color: "#374151",
+                        }}
+                      >
                         📊 Candidate Results
                       </h5>
                     </div>
@@ -487,15 +570,17 @@ const BottomBadges: React.FC<Props> = ({
                             background: "#ffffff",
                             borderRadius: "6px",
                             marginBottom: "6px",
-                            border: "1px solid rgba(102, 126, 234, 0.1)"
+                            border: "1px solid rgba(102, 126, 234, 0.1)",
                           }}
                         >
                           <div style={{ flex: 1 }}>
-                            <div style={{
-                              fontSize: "12px",
-                              fontWeight: "500",
-                              color: "#374151"
-                            }}>
+                            <div
+                              style={{
+                                fontSize: "12px",
+                                fontWeight: "500",
+                                color: "#374151",
+                              }}
+                            >
                               ID: {quiz.id} | {quiz.name}
                             </div>
                           </div>
@@ -510,13 +595,15 @@ const BottomBadges: React.FC<Props> = ({
                               fontSize: "11px",
                               fontWeight: "500",
                               cursor: "pointer",
-                              transition: "all 0.2s ease"
+                              transition: "all 0.2s ease",
                             }}
                             onMouseEnter={(e) => {
-                              e.currentTarget.style.background = "rgba(102, 126, 234, 0.15)";
+                              e.currentTarget.style.background =
+                                "rgba(102, 126, 234, 0.15)";
                             }}
                             onMouseLeave={(e) => {
-                              e.currentTarget.style.background = "rgba(102, 126, 234, 0.1)";
+                              e.currentTarget.style.background =
+                                "rgba(102, 126, 234, 0.1)";
                             }}
                           >
                             See result »
@@ -528,87 +615,139 @@ const BottomBadges: React.FC<Props> = ({
                 </div>
               )}
             </div>
-            
+
             {/* Staff Section - Integrated */}
-            <div style={{
-              borderTop: "1px solid rgba(102, 126, 234, 0.1)",
-              background: "rgba(102, 126, 234, 0.02)"
-            }}>
+            <div
+              style={{
+                borderTop: "1px solid rgba(102, 126, 234, 0.1)",
+                background: "rgba(102, 126, 234, 0.02)",
+              }}
+            >
               <div style={{ padding: "20px 24px" }}>
-                <h4 style={{
-                  margin: "0 0 16px 0",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  color: "#374151",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px"
-                }}>
+                <h4
+                  style={{
+                    margin: "0 0 16px 0",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                    color: "#374151",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
                   🏢 Department Overview
                 </h4>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "16px" }}>
-                  <div style={{
-                    padding: "12px",
-                    background: "rgba(102, 126, 234, 0.05)",
-                    borderRadius: "8px",
-                    textAlign: "center"
-                  }}>
-                    <div style={{ fontSize: "20px", marginBottom: "4px" }}>💻</div>
-                    <div style={{ fontSize: "12px", fontWeight: "600", color: "#374151" }}>Engineering</div>
-                    <div style={{ fontSize: "11px", color: "#6b7280" }}>2 Members</div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "12px",
+                    marginBottom: "16px",
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: "12px",
+                      background: "rgba(102, 126, 234, 0.05)",
+                      borderRadius: "8px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div style={{ fontSize: "20px", marginBottom: "4px" }}>
+                      💻
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: "600",
+                        color: "#374151",
+                      }}
+                    >
+                      Engineering
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#6b7280" }}>
+                      2 Members
+                    </div>
                   </div>
-                  <div style={{
-                    padding: "12px",
-                    background: "rgba(102, 126, 234, 0.05)",
-                    borderRadius: "8px",
-                    textAlign: "center"
-                  }}>
-                    <div style={{ fontSize: "20px", marginBottom: "4px" }}>🔍</div>
-                    <div style={{ fontSize: "12px", fontWeight: "600", color: "#374151" }}>QA & Analytics</div>
-                    <div style={{ fontSize: "11px", color: "#6b7280" }}>2 Members</div>
+                  <div
+                    style={{
+                      padding: "12px",
+                      background: "rgba(102, 126, 234, 0.05)",
+                      borderRadius: "8px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div style={{ fontSize: "20px", marginBottom: "4px" }}>
+                      🔍
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: "600",
+                        color: "#374151",
+                      }}
+                    >
+                      QA & Analytics
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#6b7280" }}>
+                      2 Members
+                    </div>
                   </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <button style={{
-                    padding: "12px 16px",
-                    background: "linear-gradient(135deg, #667eea, #764ba2)",
-                    color: "#ffffff",
-                    border: "none",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                    e.currentTarget.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}>
+                >
+                  <button
+                    style={{
+                      padding: "12px 16px",
+                      background: "linear-gradient(135deg, #667eea, #764ba2)",
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 4px 15px rgba(102, 126, 234, 0.3)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "none";
+                    }}
+                  >
                     📧 Contact Team
                   </button>
-                  <button style={{
-                    padding: "12px 16px",
-                    background: "rgba(102, 126, 234, 0.1)",
-                    color: "#667eea",
-                    border: "1px solid rgba(102, 126, 234, 0.2)",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(102, 126, 234, 0.15)";
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(102, 126, 234, 0.1)";
-                    e.currentTarget.style.transform = "translateY(0)";
-                  }}>
+                  <button
+                    style={{
+                      padding: "12px 16px",
+                      background: "rgba(102, 126, 234, 0.1)",
+                      color: "#667eea",
+                      border: "1px solid rgba(102, 126, 234, 0.2)",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background =
+                        "rgba(102, 126, 234, 0.15)";
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background =
+                        "rgba(102, 126, 234, 0.1)";
+                      e.currentTarget.style.transform = "translateY(0)";
+                    }}
+                  >
                     🗓️ Schedule Meeting
                   </button>
                 </div>
