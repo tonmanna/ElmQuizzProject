@@ -28,9 +28,9 @@ const BottomBadges: React.FC<Props> = ({
     },
     {
       title: "Extraction Site for Firebase",
-      description: "https://firebase-json-export-itp.lovable.app/",
+      description: "https://firebase-json-export-prod.lovable.app/",
       icon: "💻",
-      link: "https://firebase-json-export-itp.lovable.app/",
+      link: "https://firebase-json-export-prod.lovable.app/",
     },
     {
       title: "Exam Basic TDD (Junior Developer)",
