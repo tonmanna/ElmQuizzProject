@@ -27,4 +27,5 @@ export interface QuizResult {
   id: string;
   name: string;
   timestamp: Date;
+  submitDate?: string;
 }

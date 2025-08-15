@@ -7,6 +7,7 @@ interface Props {
   onChangePassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onGetQuizList: () => void;
   onGetQuizResult: (quizId: string) => () => void;
+  onDeleteQuizResult: (quizId: string) => () => void;
 }
 
 const BottomBadges: React.FC<Props> = ({
@@ -15,6 +16,7 @@ const BottomBadges: React.FC<Props> = ({
   onChangePassword,
   onGetQuizList,
   onGetQuizResult,
+  onDeleteQuizResult,
 }) => {
   const [showResources, setShowResources] = useState(false);
   const [showStaff, setShowStaff] = useState(false);
@@ -564,8 +566,7 @@ const BottomBadges: React.FC<Props> = ({
                           key={quiz.id}
                           style={{
                             display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
+                            flexDirection: "column",
                             padding: "8px 12px",
                             background: "#ffffff",
                             borderRadius: "6px",
@@ -573,41 +574,78 @@ const BottomBadges: React.FC<Props> = ({
                             border: "1px solid rgba(102, 126, 234, 0.1)",
                           }}
                         >
-                          <div style={{ flex: 1 }}>
+                          <div style={{ marginBottom: "8px" }}>
                             <div
                               style={{
                                 fontSize: "12px",
                                 fontWeight: "500",
                                 color: "#374151",
+                                marginBottom: "4px",
                               }}
                             >
                               ID: {quiz.id} | {quiz.name}
                             </div>
+                            <div
+                              style={{
+                                fontSize: "10px",
+                                color: "#6b7280",
+                              }}
+                            >
+                              Submit Date: {quiz.submitDate || 'N/A'}
+                            </div>
                           </div>
-                          <button
-                            onClick={onGetQuizResult(quiz.id)}
-                            style={{
-                              padding: "4px 12px",
-                              background: "rgba(102, 126, 234, 0.1)",
-                              color: "#667eea",
-                              border: "1px solid rgba(102, 126, 234, 0.2)",
-                              borderRadius: "4px",
-                              fontSize: "11px",
-                              fontWeight: "500",
-                              cursor: "pointer",
-                              transition: "all 0.2s ease",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background =
-                                "rgba(102, 126, 234, 0.15)";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background =
-                                "rgba(102, 126, 234, 0.1)";
-                            }}
-                          >
-                            See result »
-                          </button>
+                          <div style={{ display: "flex", gap: "8px" }}>
+                            <button
+                              onClick={onGetQuizResult(quiz.id)}
+                              style={{
+                                padding: "4px 12px",
+                                background: "rgba(102, 126, 234, 0.1)",
+                                color: "#667eea",
+                                border: "1px solid rgba(102, 126, 234, 0.2)",
+                                borderRadius: "4px",
+                                fontSize: "11px",
+                                fontWeight: "500",
+                                cursor: "pointer",
+                                transition: "all 0.2s ease",
+                                flex: 1,
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background =
+                                  "rgba(102, 126, 234, 0.15)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background =
+                                  "rgba(102, 126, 234, 0.1)";
+                              }}
+                            >
+                              See result »
+                            </button>
+                            <button
+                              onClick={onDeleteQuizResult(quiz.id)}
+                              style={{
+                                padding: "4px 12px",
+                                background: "rgba(239, 68, 68, 0.1)",
+                                color: "#dc2626",
+                                border: "1px solid rgba(239, 68, 68, 0.2)",
+                                borderRadius: "4px",
+                                fontSize: "11px",
+                                fontWeight: "500",
+                                cursor: "pointer",
+                                transition: "all 0.2s ease",
+                                flex: 1,
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background =
+                                  "rgba(239, 68, 68, 0.15)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background =
+                                  "rgba(239, 68, 68, 0.1)";
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>

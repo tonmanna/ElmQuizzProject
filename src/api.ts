@@ -70,3 +70,19 @@ export const fetchQuizList = async (token: string): Promise<QuizResult[]> => {
     return [];
   }
 };
+
+export const deleteQuizResult = async (quizId: string, token: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`${hostName}/deleteQuizResult`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ quizId, token }),
+    });
+    return response.ok;
+  } catch {
+    simpleErrorDialog("Cannot delete quiz result");
+    return false;
+  }
+};

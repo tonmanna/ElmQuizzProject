@@ -8,6 +8,7 @@ interface Props {
   onChangePassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onGetQuizList: () => void;
   onGetQuizResult: (quizId: string) => () => void;
+  onDeleteQuizResult: (quizId: string) => () => void;
 }
 
 const QuizList: React.FC<Props> = ({
@@ -16,6 +17,7 @@ const QuizList: React.FC<Props> = ({
   onGetQuizList,
   onChangePassword,
   onGetQuizResult,
+  onDeleteQuizResult,
 }) => (
   <div className="card" style={{ display: "none" }}>
     {/* Staff section moved to BottomBadges popup - hiding static content */}
@@ -49,7 +51,8 @@ const QuizList: React.FC<Props> = ({
               <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
-                <th scope="col">Date</th>
+                <th scope="col">Submit Date</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -57,7 +60,7 @@ const QuizList: React.FC<Props> = ({
                 <tr key={quiz.id}>
                   <td>{quiz.id}</td>
                   <td>{quiz.name}</td>
-                  <td>{}</td>
+                  <td>{quiz.submitDate || 'N/A'}</td>
                   <td>
                     <span
                       className="btn btn-success"
@@ -65,6 +68,13 @@ const QuizList: React.FC<Props> = ({
                       onClick={onGetQuizResult(quiz.id)}
                     >
                       See result »
+                    </span>
+                    <span
+                      className="btn btn-danger"
+                      style={{ margin: "5px" }}
+                      onClick={onDeleteQuizResult(quiz.id)}
+                    >
+                      Delete
                     </span>
                   </td>
                 </tr>

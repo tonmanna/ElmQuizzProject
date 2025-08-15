@@ -5,6 +5,7 @@ import {
   fetchQuizList,
   fetchQuizResult,
   submitAnswers,
+  deleteQuizResult,
 } from "./api";
 import StartBadge from "./components/StartBadge";
 import FinishBadge from "./components/FinishBadge";
@@ -56,7 +57,7 @@ const App: React.FC = () => {
       hiddenQuestion: false,
       questionNumber: 1,
       candidateID: model.candidateID || "Anonymous",
-      startDate: new Date().toLocaleString(),
+      startDate: new Date().toISOString(),
     };
     await updateModel(updateState);
   };
@@ -84,10 +85,10 @@ const App: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const updateState = { 
-      ...model, 
+    const updateState = {
+      ...model,
       complete: true,
-      submitDate: new Date().toISOString()
+      submitDate: new Date().toISOString(),
     };
     setModel(updateState);
     await submitAnswers(updateState);
@@ -162,6 +163,18 @@ const App: React.FC = () => {
     setQuizList(quizList);
   };
 
+  const handleDeleteQuizResult = (quizId: string) => async () => {
+    const confirmed = window.confirm("Are you sure you want to delete this quiz result?");
+    if (confirmed) {
+      const success = await deleteQuizResult(quizId, password);
+      if (success) {
+        // Refresh the quiz list after successful deletion
+        const updatedQuizList = await fetchQuizList(password);
+        setQuizList(updatedQuizList);
+      }
+    }
+  };
+
   const updateModel = async (update: MainModel) => {
     await codeHeighLight(update);
     setModel(update);
@@ -216,6 +229,7 @@ const App: React.FC = () => {
                 onGetQuizList={handleQuizList}
                 onChangePassword={handleChangePassword}
                 onGetQuizResult={handleChangeCandidateSubmitByID}
+                onDeleteQuizResult={handleDeleteQuizResult}
               />
             </div>
           </>
@@ -245,12 +259,13 @@ const App: React.FC = () => {
           </>
         )}
       </div>
-      <BottomBadges 
+      <BottomBadges
         password={password}
         quizList={quizList}
         onChangePassword={handleChangePassword}
         onGetQuizList={handleQuizList}
         onGetQuizResult={handleChangeCandidateSubmitByID}
+        onDeleteQuizResult={handleDeleteQuizResult}
       />
     </>
   );
