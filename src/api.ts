@@ -17,6 +17,9 @@ export const fetchQuestions = async (role: string): Promise<QuestionModel[]> => 
       case 'DATA ENGINEER':
         endpoint = '/getDataEngineerQuiz';
         break;
+      case 'PRODUCT OWNER':
+        endpoint = '/getProductOwnerQuiz';
+        break;
       case 'DEVELOPER':
       default:
         endpoint = '/getQuiz';

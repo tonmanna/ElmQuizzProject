@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an Elm Quiz application that has been migrated to React + TypeScript while maintaining backward compatibility with Elm. It's an exam/quiz platform that allows candidates to take programming tests with both text answers and code editing capabilities using Monaco Editor.
+This is a React + TypeScript quiz application for programming exams. It allows candidates to take tests with both text answers and code editing capabilities using Monaco Editor. The platform supports role-based quizzes (Developer, Tester, Data Engineer, Product Owner) and includes an admin interface for viewing and managing results.
 
 ## Development Commands
 
@@ -15,14 +15,15 @@ This is an Elm Quiz application that has been migrated to React + TypeScript whi
 - `npm run lint` - Run ESLint on the codebase
 
 ### Testing
-No test framework is currently configured. Tests would need to be set up before implementation.
+- Jest is configured in package.json but no tests are currently implemented
+- Test scripts would need to be added to package.json before running tests
 
 ## Architecture Overview
 
-### Hybrid Elm + React Architecture
-- **Main.elm**: Original Elm application code (port module) that communicates with React via ports
-- **App.tsx**: Main React application component managing state and UI
-- **Integration**: Elm ports communicate with TypeScript controllers for Monaco Editor, syntax highlighting, and local storage
+### React + TypeScript Architecture
+- **App.tsx**: Main React application component managing all state and UI navigation
+- **Types System**: Centralized TypeScript interfaces (`MainModel`, `QuestionModel`, `QuizResult`)
+- **Controller Integration**: TypeScript controllers handle Monaco Editor, syntax highlighting, and API interactions
 
 ### Key Components Structure
 - **StartBadge**: Initial exam entry screen with candidate ID input
@@ -56,8 +57,9 @@ No test framework is currently configured. Tests would need to be set up before 
 
 ### API Integration
 - Base URL switches between `localhost:4000` (dev) and `https://exam.itopplus.com` (prod)
-- Endpoints: `/getQuiz`, `/submitAnswer`, `/getQuizResult`, `/getQuizList`
-- Error handling with user-friendly dialog messages
+- Role-based quiz endpoints: `/getQuiz` (Developer), `/getTesterQuiz`, `/getDataEngineerQuiz`, `/getProductOwnerQuiz`
+- Additional endpoints: `/submitAnswer`, `/getQuizResult`, `/getQuizList`, `/deleteQuizResult`
+- Error handling with user-friendly dialog messages via `simpleErrorDialog`
 
 ### Monaco Editor Integration
 - Dynamic container creation with unique IDs per question
@@ -76,14 +78,20 @@ No test framework is currently configured. Tests would need to be set up before 
 ### State Management
 - Single `MainModel` interface centralizing all application state
 - Immutable state updates with spread operator
-- Question navigation with automatic editor reinitialization
+- Question navigation with automatic editor reinitialization via `updateModel`
 
 ### Error Handling
-- API errors caught and displayed via `simpleErrorDialog`
+- API errors caught and displayed via `simpleErrorDialog` 
 - HTTP error mapping with user-friendly messages
 - Graceful fallbacks for missing data
 
 ### Component Communication
 - Props-based data flow between React components
 - Event handlers passed down for state updates
-- Monaco Editor events bubble up through callback chain
+- Monaco Editor events bubble up through callback chain with `onDidChangeContent`
+
+### Key Features
+- **Role Selection**: Support for Developer, Tester, Data Engineer, and Product Owner quiz types
+- **Admin Functions**: Password-protected quiz list viewing and result deletion
+- **Persistence**: Local storage integration for answer persistence
+- **Monaco Integration**: Full code editor with syntax highlighting and change detection
