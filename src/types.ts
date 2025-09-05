@@ -21,11 +21,23 @@ export interface MainModel {
   startDate: string;
   submitDate: string;
   selectedRole: string;
+  examType?: string;
 }
 
-export interface QuizResult {
+export interface QuizResultData {
   id: string;
-  name: string;
+  body: {
+    questions: QuestionModel[];
+    questionNumber: number;
+    hiddenQuestion: boolean;
+    candidateID: string;
+    candidateSubmitID: string;
+    errorMessage: string;
+    complete: boolean;
+    startDate: string;
+    submitDate: string;
+    selectedRole: string;
+    examType?: string;
+  };
   timestamp: Date;
-  submitDate?: string;
 }

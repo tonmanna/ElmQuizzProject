@@ -1,34 +1,36 @@
 import { simpleErrorDialog } from "./scripts/controllers/submit_answer";
-import { MainModel, QuestionModel, QuizResult } from "./types";
+import { MainModel, QuestionModel, QuizResultData } from "./types";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let window: any;
 const hostName =
   window.location.hostname == "localhost"
     ? "http://localhost:4000"
     : "https://exam.itopplus.com";
-export const fetchQuestions = async (role: string): Promise<QuestionModel[]> => {
+export const fetchQuestions = async (
+  role: string
+): Promise<QuestionModel[]> => {
   try {
-    let endpoint = '/getQuiz'; // Default for DEVELOPER
-    
+    let endpoint = "/getQuiz"; // Default for DEVELOPER
+
     switch (role) {
-      case 'TESTER':
-        endpoint = '/getTesterQuiz';
+      case "TESTER":
+        endpoint = "/getTesterQuiz";
         break;
-      case 'DATA ENGINEER':
-        endpoint = '/getDataEngineerQuiz';
+      case "DATA ENGINEER":
+        endpoint = "/getDataEngineerQuiz";
         break;
-      case 'PRODUCT OWNER':
-        endpoint = '/getProductOwnerQuiz';
+      case "PRODUCT OWNER":
+        endpoint = "/getProductOwnerQuiz";
         break;
-      case 'SALES MANAGER':
-        endpoint = '/getSalesManagerQuiz';
+      case "SALES MANAGER":
+        endpoint = "/getSalesManagerQuiz";
         break;
-      case 'DEVELOPER':
+      case "DEVELOPER":
       default:
-        endpoint = '/getQuiz';
+        endpoint = "/getQuiz";
         break;
     }
-    
+
     const response = await fetch(`${hostName}${endpoint}`);
     const data = await response.json();
     return data;
@@ -58,14 +60,19 @@ export const submitAnswers = async (model: MainModel): Promise<void> => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(model),
+      body: JSON.stringify({
+        ...model,
+        examType: model.selectedRole
+      }),
     });
   } catch {
     simpleErrorDialog("Cannot submit answers");
   }
 };
 
-export const fetchQuizList = async (token: string): Promise<QuizResult[]> => {
+export const fetchQuizList = async (
+  token: string
+): Promise<QuizResultData[]> => {
   try {
     console.log("token: ", token);
     const response = await fetch(`${hostName}/getQuizList?token=${token}`);
@@ -77,7 +84,10 @@ export const fetchQuizList = async (token: string): Promise<QuizResult[]> => {
   }
 };
 
-export const deleteQuizResult = async (quizId: string, token: string): Promise<boolean> => {
+export const deleteQuizResult = async (
+  quizId: string,
+  token: string
+): Promise<boolean> => {
   try {
     const response = await fetch(`${hostName}/deleteQuizResult`, {
       method: "DELETE",

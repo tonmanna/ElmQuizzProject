@@ -583,7 +583,7 @@ const BottomBadges: React.FC<Props> = ({
                                 marginBottom: "4px",
                               }}
                             >
-                              ID: {quiz.id} | {quiz.name}
+                              ID: {quiz.body.candidateID}
                             </div>
                             <div
                               style={{
@@ -591,7 +591,7 @@ const BottomBadges: React.FC<Props> = ({
                                 color: "#6b7280",
                               }}
                             >
-                              Submit Date: {quiz.submitDate || 'N/A'}
+                              Submit Date: {quiz.body.submitDate || "N/A"}
                             </div>
                           </div>
                           <div style={{ display: "flex", gap: "8px" }}>

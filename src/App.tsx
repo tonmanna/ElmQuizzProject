@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MainModel, QuizResult } from "./types";
+import { MainModel, QuizResultData } from "./types";
 import {
   fetchQuestions,
   fetchQuizList,
@@ -38,7 +38,7 @@ const initialModel: MainModel = {
 const App: React.FC = () => {
   const [model, setModel] = useState<MainModel>(initialModel);
   const [password, setPassword] = useState<string>("");
-  const [quizList, setQuizList] = useState<QuizResult[]>([]);
+  const [quizList, setQuizList] = useState<QuizResultData[]>([]);
 
   useEffect(() => {
     // Fetch initial data if needed
@@ -63,23 +63,17 @@ const App: React.FC = () => {
   };
 
   const handleNext = async () => {
-    const hideQuestion =
-      model.questionNumber == model.questions.length ? true : false;
     const updateState = {
       ...model,
       questionNumber: model.questionNumber + 1,
-      hideQuestion,
     };
     await updateModel(updateState);
   };
 
   const handleBack = async () => {
-    const hideQuestion =
-      model.questionNumber == model.questions.length ? true : false;
     const updateState = {
       ...model,
       questionNumber: model.questionNumber - 1,
-      hideQuestion,
     };
     await updateModel(updateState);
   };
@@ -164,7 +158,9 @@ const App: React.FC = () => {
   };
 
   const handleDeleteQuizResult = (quizId: string) => async () => {
-    const confirmed = window.confirm("Are you sure you want to delete this quiz result?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this quiz result?"
+    );
     if (confirmed) {
       const success = await deleteQuizResult(quizId, password);
       if (success) {

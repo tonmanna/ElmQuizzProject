@@ -1,8 +1,8 @@
 import React from "react";
-import { QuizResult } from "../types";
+import { QuizResultData } from "../types";
 
 interface Props {
-  model: QuizResult[];
+  model: QuizResultData[];
   password: string;
 
   onChangePassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -59,8 +59,8 @@ const QuizList: React.FC<Props> = ({
               {model.map((quiz) => (
                 <tr key={quiz.id}>
                   <td>{quiz.id}</td>
-                  <td>{quiz.name}</td>
-                  <td>{quiz.submitDate || 'N/A'}</td>
+                  <td>{quiz.body.candidateID}</td>
+                  <td>{quiz.body.submitDate || "N/A"}</td>
                   <td>
                     <span
                       className="btn btn-success"
