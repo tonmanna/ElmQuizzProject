@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { QuizResult } from "../types";
+import AiResultModal from "./AiResultModal";
 
 interface Props {
   password: string;
@@ -20,6 +21,7 @@ const BottomBadges: React.FC<Props> = ({
 }) => {
   const [showResources, setShowResources] = useState(false);
   const [showStaff, setShowStaff] = useState(false);
+  const [selectedAiResult, setSelectedAiResult] = useState<string | null>(null);
 
   const resourcesData = [
     {
@@ -594,7 +596,7 @@ const BottomBadges: React.FC<Props> = ({
                               Submit Date: {quiz.body.submitDate || "N/A"}
                             </div>
                           </div>
-                          <div style={{ display: "flex", gap: "8px" }}>
+                          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                             <button
                               onClick={onGetQuizResult(quiz.id)}
                               style={{
@@ -608,6 +610,7 @@ const BottomBadges: React.FC<Props> = ({
                                 cursor: "pointer",
                                 transition: "all 0.2s ease",
                                 flex: 1,
+                                minWidth: "80px",
                               }}
                               onMouseEnter={(e) => {
                                 e.currentTarget.style.background =
@@ -620,6 +623,34 @@ const BottomBadges: React.FC<Props> = ({
                             >
                               See result »
                             </button>
+                            {quiz.body.aiResult?.output && (
+                              <button
+                                onClick={() => setSelectedAiResult(quiz.body.aiResult?.output || null)}
+                                style={{
+                                  padding: "4px 12px",
+                                  background: "rgba(16, 185, 129, 0.1)",
+                                  color: "#059669",
+                                  border: "1px solid rgba(16, 185, 129, 0.2)",
+                                  borderRadius: "4px",
+                                  fontSize: "11px",
+                                  fontWeight: "500",
+                                  cursor: "pointer",
+                                  transition: "all 0.2s ease",
+                                  flex: 1,
+                                  minWidth: "80px",
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.background =
+                                    "rgba(16, 185, 129, 0.15)";
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background =
+                                    "rgba(16, 185, 129, 0.1)";
+                                }}
+                              >
+                                AI Result
+                              </button>
+                            )}
                             <button
                               onClick={onDeleteQuizResult(quiz.id)}
                               style={{
@@ -633,6 +664,7 @@ const BottomBadges: React.FC<Props> = ({
                                 cursor: "pointer",
                                 transition: "all 0.2s ease",
                                 flex: 1,
+                                minWidth: "60px",
                               }}
                               onMouseEnter={(e) => {
                                 e.currentTarget.style.background =
@@ -794,6 +826,12 @@ const BottomBadges: React.FC<Props> = ({
           </div>
         </div>
       )}
+
+      {/* AI Result Modal */}
+      <AiResultModal
+        aiResult={selectedAiResult}
+        onClose={() => setSelectedAiResult(null)}
+      />
 
       {/* Add CSS Animation */}
       <style>
