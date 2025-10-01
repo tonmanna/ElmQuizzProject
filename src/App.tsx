@@ -18,7 +18,6 @@ import {
 } from "./scripts/controllers/monaco";
 import codeHeighLight from "./scripts/controllers/code_heighlight";
 import { showDialog } from "./scripts/controllers/submit_answer";
-import QuizList from "./components/QuizList";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let window: any;
@@ -213,21 +212,11 @@ const App: React.FC = () => {
               onChangeCandidateID={handleChangeCandidate}
               onChangeRole={handleChangeRole}
             />
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <DownloadLink
-                model={model}
-                onCheckResult={handleCheckResult}
-                onChangeCandidateSubmitID={handleChangeCandidateSubmitID}
-              />
-              <QuizList
-                model={quizList}
-                password={password}
-                onGetQuizList={handleQuizList}
-                onChangePassword={handleChangePassword}
-                onGetQuizResult={handleChangeCandidateSubmitByID}
-                onDeleteQuizResult={handleDeleteQuizResult}
-              />
-            </div>
+            <DownloadLink
+              model={model}
+              onCheckResult={handleCheckResult}
+              onChangeCandidateSubmitID={handleChangeCandidateSubmitID}
+            />
           </>
         ) : (
           <>
