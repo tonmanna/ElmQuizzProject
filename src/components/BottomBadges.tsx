@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { QuizResult } from "../types";
+import { QuizResultData } from "../types";
 import AiResultModal from "./AiResultModal";
 
 interface Props {
   password: string;
-  quizList: QuizResult[];
+  quizList: QuizResultData[];
   onChangePassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onGetQuizList: () => void;
   onGetQuizResult: (quizId: string) => () => void;
