@@ -591,6 +591,15 @@ const BottomBadges: React.FC<Props> = ({
                               style={{
                                 fontSize: "10px",
                                 color: "#6b7280",
+                                marginBottom: "2px",
+                              }}
+                            >
+                              Role: {quiz.body.selectedRole || "N/A"}
+                            </div>
+                            <div
+                              style={{
+                                fontSize: "10px",
+                                color: "#6b7280",
                               }}
                             >
                               Submit Date: {quiz.body.submitDate || "N/A"}
