@@ -593,6 +593,7 @@ const BottomBadges: React.FC<Props> = ({
                             >
                               <span>ID: {quiz.body.candidateID}</span>
                               <span
+                                onClick={() => setConfirmToggle({quizId: quiz.id, currentStatus: quiz.body.passed})}
                                 style={{
                                   padding: "2px 8px",
                                   borderRadius: "4px",
@@ -608,7 +609,23 @@ const BottomBadges: React.FC<Props> = ({
                                     : quiz.body.passed === false
                                     ? "#dc2626"
                                     : "#6b7280",
+                                  cursor: "pointer",
+                                  transition: "all 0.2s ease",
+                                  border: "1px solid transparent",
                                 }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.transform = "scale(1.05)";
+                                  e.currentTarget.style.borderColor = quiz.body.passed === true
+                                    ? "#059669"
+                                    : quiz.body.passed === false
+                                    ? "#dc2626"
+                                    : "#6b7280";
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.transform = "scale(1)";
+                                  e.currentTarget.style.borderColor = "transparent";
+                                }}
+                                title="Click to change status"
                               >
                                 {quiz.body.passed === true
                                   ? "✓ PASS"
@@ -715,40 +732,6 @@ const BottomBadges: React.FC<Props> = ({
                               }}
                             >
                               Delete
-                            </button>
-                            <button
-                              onClick={() => setConfirmToggle({quizId: quiz.id, currentStatus: quiz.body.passed})}
-                              style={{
-                                padding: "4px 12px",
-                                background: quiz.body.passed === true
-                                  ? "rgba(239, 68, 68, 0.1)"
-                                  : "rgba(16, 185, 129, 0.1)",
-                                color: quiz.body.passed === true
-                                  ? "#dc2626"
-                                  : "#059669",
-                                border: quiz.body.passed === true
-                                  ? "1px solid rgba(239, 68, 68, 0.2)"
-                                  : "1px solid rgba(16, 185, 129, 0.2)",
-                                borderRadius: "4px",
-                                fontSize: "11px",
-                                fontWeight: "500",
-                                cursor: "pointer",
-                                transition: "all 0.2s ease",
-                                flex: 1,
-                                minWidth: "80px",
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = quiz.body.passed === true
-                                  ? "rgba(239, 68, 68, 0.15)"
-                                  : "rgba(16, 185, 129, 0.15)";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = quiz.body.passed === true
-                                  ? "rgba(239, 68, 68, 0.1)"
-                                  : "rgba(16, 185, 129, 0.1)";
-                              }}
-                            >
-                              {quiz.body.passed === true ? "Mark Not Pass" : "Mark Pass"}
                             </button>
                           </div>
                         </div>
