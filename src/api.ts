@@ -110,7 +110,7 @@ export const updatePassStatus = async (
 ): Promise<boolean> => {
   try {
     const response = await fetch(`${hostName}/updatePassStatus`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
