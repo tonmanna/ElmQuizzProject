@@ -6,6 +6,7 @@ import {
   fetchQuizResult,
   submitAnswers,
   deleteQuizResult,
+  updatePassStatus,
 } from "./api";
 import StartBadge from "./components/StartBadge";
 import FinishBadge from "./components/FinishBadge";
@@ -170,6 +171,16 @@ const App: React.FC = () => {
     }
   };
 
+  const handleTogglePassStatus = (quizId: string, currentStatus: boolean | undefined) => async () => {
+    const newStatus = currentStatus === true ? false : true;
+    const success = await updatePassStatus(quizId, newStatus, password);
+    if (success) {
+      // Refresh the quiz list after successful update
+      const updatedQuizList = await fetchQuizList(password);
+      setQuizList(updatedQuizList);
+    }
+  };
+
   const updateModel = async (update: MainModel) => {
     await codeHeighLight(update);
     setModel(update);
@@ -251,6 +262,7 @@ const App: React.FC = () => {
         onGetQuizList={handleQuizList}
         onGetQuizResult={handleChangeCandidateSubmitByID}
         onDeleteQuizResult={handleDeleteQuizResult}
+        onTogglePassStatus={handleTogglePassStatus}
       />
     </>
   );

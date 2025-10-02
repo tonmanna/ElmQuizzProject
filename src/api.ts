@@ -102,3 +102,23 @@ export const deleteQuizResult = async (
     return false;
   }
 };
+
+export const updatePassStatus = async (
+  quizId: string,
+  passed: boolean,
+  token: string
+): Promise<boolean> => {
+  try {
+    const response = await fetch(`${hostName}/updatePassStatus`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ quizId, passed, token }),
+    });
+    return response.ok;
+  } catch {
+    simpleErrorDialog("Cannot update pass status");
+    return false;
+  }
+};

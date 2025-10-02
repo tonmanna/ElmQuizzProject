@@ -9,6 +9,7 @@ interface Props {
   onGetQuizList: () => void;
   onGetQuizResult: (quizId: string) => () => void;
   onDeleteQuizResult: (quizId: string) => () => void;
+  onTogglePassStatus: (quizId: string, currentStatus: boolean | undefined) => () => void;
 }
 
 const BottomBadges: React.FC<Props> = ({
@@ -18,10 +19,12 @@ const BottomBadges: React.FC<Props> = ({
   onGetQuizList,
   onGetQuizResult,
   onDeleteQuizResult,
+  onTogglePassStatus,
 }) => {
   const [showResources, setShowResources] = useState(false);
   const [showStaff, setShowStaff] = useState(false);
   const [selectedAiResult, setSelectedAiResult] = useState<string | null>(null);
+  const [confirmToggle, setConfirmToggle] = useState<{quizId: string, currentStatus: boolean | undefined} | null>(null);
 
   const resourcesData = [
     {
@@ -583,9 +586,36 @@ const BottomBadges: React.FC<Props> = ({
                                 fontWeight: "500",
                                 color: "#374151",
                                 marginBottom: "4px",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "8px",
                               }}
                             >
-                              ID: {quiz.body.candidateID}
+                              <span>ID: {quiz.body.candidateID}</span>
+                              <span
+                                style={{
+                                  padding: "2px 8px",
+                                  borderRadius: "4px",
+                                  fontSize: "10px",
+                                  fontWeight: "600",
+                                  background: quiz.body.passed === true
+                                    ? "rgba(16, 185, 129, 0.1)"
+                                    : quiz.body.passed === false
+                                    ? "rgba(239, 68, 68, 0.1)"
+                                    : "rgba(156, 163, 175, 0.1)",
+                                  color: quiz.body.passed === true
+                                    ? "#059669"
+                                    : quiz.body.passed === false
+                                    ? "#dc2626"
+                                    : "#6b7280",
+                                }}
+                              >
+                                {quiz.body.passed === true
+                                  ? "✓ PASS"
+                                  : quiz.body.passed === false
+                                  ? "✗ NOT PASS"
+                                  : "⊙ PENDING"}
+                              </span>
                             </div>
                             <div
                               style={{
@@ -685,6 +715,40 @@ const BottomBadges: React.FC<Props> = ({
                               }}
                             >
                               Delete
+                            </button>
+                            <button
+                              onClick={() => setConfirmToggle({quizId: quiz.id, currentStatus: quiz.body.passed})}
+                              style={{
+                                padding: "4px 12px",
+                                background: quiz.body.passed === true
+                                  ? "rgba(239, 68, 68, 0.1)"
+                                  : "rgba(16, 185, 129, 0.1)",
+                                color: quiz.body.passed === true
+                                  ? "#dc2626"
+                                  : "#059669",
+                                border: quiz.body.passed === true
+                                  ? "1px solid rgba(239, 68, 68, 0.2)"
+                                  : "1px solid rgba(16, 185, 129, 0.2)",
+                                borderRadius: "4px",
+                                fontSize: "11px",
+                                fontWeight: "500",
+                                cursor: "pointer",
+                                transition: "all 0.2s ease",
+                                flex: 1,
+                                minWidth: "80px",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = quiz.body.passed === true
+                                  ? "rgba(239, 68, 68, 0.15)"
+                                  : "rgba(16, 185, 129, 0.15)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = quiz.body.passed === true
+                                  ? "rgba(239, 68, 68, 0.1)"
+                                  : "rgba(16, 185, 129, 0.1)";
+                              }}
+                            >
+                              {quiz.body.passed === true ? "Mark Not Pass" : "Mark Pass"}
                             </button>
                           </div>
                         </div>
@@ -841,6 +905,121 @@ const BottomBadges: React.FC<Props> = ({
         aiResult={selectedAiResult}
         onClose={() => setSelectedAiResult(null)}
       />
+
+      {/* Confirmation Dialog */}
+      {confirmToggle && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10000,
+            backdropFilter: "blur(4px)",
+          }}
+          onClick={() => setConfirmToggle(null)}
+        >
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: "12px",
+              padding: "24px",
+              maxWidth: "400px",
+              width: "90%",
+              boxShadow: "0 20px 40px rgba(0, 0, 0, 0.2)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3
+              style={{
+                margin: "0 0 16px 0",
+                fontSize: "18px",
+                fontWeight: "700",
+                color: "#374151",
+              }}
+            >
+              Confirm Status Change
+            </h3>
+            <p
+              style={{
+                margin: "0 0 24px 0",
+                fontSize: "14px",
+                color: "#6b7280",
+                lineHeight: "1.6",
+              }}
+            >
+              Are you sure you want to mark this candidate as{" "}
+              <strong style={{ color: confirmToggle.currentStatus === true ? "#dc2626" : "#059669" }}>
+                {confirmToggle.currentStatus === true ? "NOT PASS" : "PASS"}
+              </strong>?
+            </p>
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                justifyContent: "flex-end",
+              }}
+            >
+              <button
+                onClick={() => setConfirmToggle(null)}
+                style={{
+                  padding: "10px 20px",
+                  background: "rgba(156, 163, 175, 0.1)",
+                  color: "#6b7280",
+                  border: "1px solid rgba(156, 163, 175, 0.2)",
+                  borderRadius: "6px",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(156, 163, 175, 0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(156, 163, 175, 0.1)";
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  onTogglePassStatus(confirmToggle.quizId, confirmToggle.currentStatus)();
+                  setConfirmToggle(null);
+                }}
+                style={{
+                  padding: "10px 20px",
+                  background: confirmToggle.currentStatus === true
+                    ? "linear-gradient(135deg, #dc2626, #b91c1c)"
+                    : "linear-gradient(135deg, #059669, #047857)",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: "6px",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow = "0 4px 15px rgba(0, 0, 0, 0.2)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add CSS Animation */}
       <style>

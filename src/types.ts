@@ -38,6 +38,7 @@ export interface QuizResultData {
     submitDate: string;
     selectedRole: string;
     examType?: string;
+    passed?: boolean;
     aiResult?: {
       output: string;
     };
