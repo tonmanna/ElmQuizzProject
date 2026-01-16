@@ -25,6 +25,9 @@ export const fetchQuestions = async (
       case "SALES MANAGER":
         endpoint = "/getSalesManagerQuiz";
         break;
+      case "BUSINESS IMPROVEMENT":
+        endpoint = "/getBusinessImprovementQuiz";
+        break;
       case "DEVELOPER":
       default:
         endpoint = "/getQuiz";

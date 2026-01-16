@@ -245,7 +245,7 @@ const StartBadge: React.FC<Props> = ({
               gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
               gap: "16px"
             }}>
-              {["TESTER", "DEVELOPER", "DATA ENGINEER", "PRODUCT OWNER", "SALES MANAGER"].map((role) => (
+              {["TESTER", "DEVELOPER", "DATA ENGINEER", "PRODUCT OWNER", "SALES MANAGER", "BUSINESS IMPROVEMENT"].map((role) => (
                 <button
                   key={role}
                   onClick={() => onChangeRole(role)}
